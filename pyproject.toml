@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "cumplo-common"
+version = "0.1.0"
+description = "Python library that contains all common logic throughout Cumplo API project"
+authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
+readme = "README.md"
+packages = [{ include = "cumplo_common" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.1.1"
+arrow = "^1.2.3"
+firebase-admin = "^6.2.0"
+babel = "^2.12.1"
+python-dotenv = "^1.0.0"
+google-cloud-tasks = "^2.14.1"
+types-protobuf = "^4.23.0.2"
+fastapi = "^0.101.0"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.17.5"
+flake8 = "^6.1.0"
+black = "^23.7.0"
+mypy = "^1.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
