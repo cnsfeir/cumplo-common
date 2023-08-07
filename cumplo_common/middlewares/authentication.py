@@ -10,7 +10,7 @@ from fastapi.requests import Request
 from cumplo_common.database.firestore import firestore_client
 
 
-async def authenticate(request: Request, x_api_key: Annotated[str | None, Header()] = None) -> None:
+async def authenticate(request: Request, x_api_key: Annotated[str | None, Header] = None) -> None:
     """
     Authenticates a request.
     """
