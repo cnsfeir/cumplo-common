@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from typing import Annotated
 
+import arrow
 from google.cloud.tasks_v2 import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, Task
 from google.protobuf.duration_pb2 import Duration
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -22,6 +23,7 @@ def create_http_task(
     Create an HTTP POST task with a JSON payload.
     """
     client = CloudTasksClient()
+    task_id = f"{task_id}-{arrow.utcnow().timestamp}"
     name = client.task_path(PROJECT_ID, LOCATION, queue, task_id)
 
     http_request = HttpRequest(
