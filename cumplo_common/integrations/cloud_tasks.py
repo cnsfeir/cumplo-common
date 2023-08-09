@@ -21,8 +21,21 @@ def create_http_task(
 ) -> Task:
     """
     Create an HTTP POST task with a JSON payload.
+
+    Args:
+        url (str): Destination URL
+        queue (str): Queue name
+        payload (dict): Request JSON payload
+        task_id (str): Task identifier
+        dispatch_deadline (int | None, optional): Seconds until the task is dispatched. Defaults to None.
+        schedule_time (datetime | None, optional): Time at which the task will be scheduled. Defaults to None.
+        http_method (Annotated[int, HttpMethod], optional): HTTP method to use. Defaults to HttpMethod.POST.
+
+    Returns:
+        Task: A unit of scheduled work
     """
     client = CloudTasksClient()
+
     task_id = f"{task_id}-{arrow.utcnow().timestamp}"
     name = client.task_path(PROJECT_ID, LOCATION, queue, task_id)
 

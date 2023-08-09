@@ -27,9 +27,17 @@ class Configuration(BaseModel):
     def __eq__(self, other: Any) -> bool:
         return self.__hash__() == other.__hash__()
 
-    def serialize(self, to_firestore: bool = False) -> dict[str, Any]:
-        """Serializes a configuration"""
-        if to_firestore:
+    def serialize(self, for_firestore: bool = False) -> dict[str, Any]:
+        """
+        Serializes the configuration
+
+        Args:
+            for_firestore (bool, optional): Whether to serialize for Firestore or not. Defaults to False.
+
+        Returns:
+            dict[str, Any]: The serialized configuration as a dictionary
+        """
+        if for_firestore:
             content = self.model_dump(exclude_none=True, exclude={"id"})
             for key, value in content.items():
                 if isinstance(value, Decimal):

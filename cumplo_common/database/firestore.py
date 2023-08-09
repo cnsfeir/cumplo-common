@@ -29,6 +29,9 @@ class FirestoreClient:
     def get_users(self) -> Generator[User, None, None]:
         """
         Gets all the users data
+
+        Yields:
+            Generator[User, None, None]: Iterable of User objects
         """
         logger.info("Getting all users from Firestore")
         user_stream = self.client.collection(USERS_COLLECTION).stream()
@@ -37,7 +40,17 @@ class FirestoreClient:
 
     def get_user(self, api_key: str) -> User:
         """
-        Gets the user data
+        Gets the user data for a given API key
+
+        Args:
+            api_key (str): User API key
+
+        Raises:
+            KeyError: When the user does not exist
+            ValueError: When the user data is empty
+
+        Returns:
+            User: A User object containing the user data
         """
         logger.info(f"Getting user with API key {secure_key(api_key)} from Firestore")
         filter_ = FieldFilter("api_key", "==", api_key)
@@ -55,7 +68,11 @@ class FirestoreClient:
 
     def update_notification(self, id_user: str, id_funding_request: int) -> None:
         """
-        Updates the notification for a given user
+        Updates the notification for a given user and funding request
+
+        Args:
+            id_user (str): A user ID which owns the notification
+            id_funding_request (int): A funding request ID
         """
         logger.info(f"Updating notification for funding request {id_funding_request} at Firestore")
         notification = self._get_notification_document(id_user, id_funding_request)
@@ -64,14 +81,22 @@ class FirestoreClient:
     def update_configuration(self, id_user: str, configuration: Configuration) -> None:
         """
         Updates a configuration of a given user
+
+        Args:
+            id_user (str): A user ID which owns the configuration
+            configuration (Configuration): A Configuration object containing the new configuration data to be updated
         """
         logger.info(f"Updating configuration {configuration.id} of user {id_user} at Firestore")
         configuration_reference = self._get_configuration_document(id_user, configuration.id)
-        configuration_reference.set(configuration.serialize(to_firestore=True))
+        configuration_reference.set(configuration.serialize(for_firestore=True))
 
     def delete_notification(self, id_user: str, id_funding_request: int) -> None:
         """
         Deletes a notification of a funding request for a given user
+
+        Args:
+            id_user (str): A user ID which owns the notification
+            id_funding_request (int): A funding request ID to be deleted
         """
         logger.info(f"Deleting notification {id_funding_request} from Firestore")
         notification = self._get_notification_document(id_user, id_funding_request)
@@ -79,7 +104,11 @@ class FirestoreClient:
 
     def delete_configuration(self, id_user: str, id_configuration: int) -> None:
         """
-        Deletes a configuration for a given user
+        Deletes a configuration for a given user and configuration ID
+
+        Args:
+            id_user (str): A user ID which owns the configuration
+            id_configuration (int): A configuration ID to be deleted
         """
         logger.info(f"Deleting configuration {id_configuration} from Firestore")
         configuration = self._get_configuration_document(id_user, id_configuration)

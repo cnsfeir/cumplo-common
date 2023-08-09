@@ -12,7 +12,14 @@ from cumplo_common.database.firestore import firestore_client
 
 async def authenticate(request: Request, x_api_key: Annotated[str | None, Header] = None) -> None:
     """
-    Authenticates a request.
+    Authenticates a request using the X-API-KEY header
+
+    Args:
+        request (Request): The request to authenticate
+        x_api_key (Annotated[str  |  None, Header], optional): API key header. Defaults to None.
+
+    Raises:
+        HTTPException: When the API key is not present or invalid
     """
     if not x_api_key:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)

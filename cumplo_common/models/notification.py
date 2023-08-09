@@ -11,5 +11,13 @@ class Notification(BaseModel):
     date: datetime = Field(...)
 
     def has_expired(self, expiration_minutes: int) -> bool:
-        """Checks if the notification has expired"""
+        """
+        Checks if the notification has expired
+
+        Args:
+            expiration_minutes (int): Minutes until the notification expires
+
+        Returns:
+            bool: Whether the notification has expired or not
+        """
         return arrow.get(self.date).shift(minutes=expiration_minutes) < arrow.utcnow()
