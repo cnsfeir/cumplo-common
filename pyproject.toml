@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "0.1.5"
+version = "0.1.6"
 description = "Python library that contains all common logic throughout Cumplo API project"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
 readme = "README.md"
