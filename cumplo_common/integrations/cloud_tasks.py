@@ -36,7 +36,7 @@ def create_http_task(
     """
     client = CloudTasksClient()
 
-    task_id = f"{task_id}-{arrow.utcnow().timestamp}"
+    task_id = f"{task_id}-{round(arrow.utcnow().timestamp())}"
     name = client.task_path(PROJECT_ID, LOCATION, queue, task_id)
 
     http_request = HttpRequest(
