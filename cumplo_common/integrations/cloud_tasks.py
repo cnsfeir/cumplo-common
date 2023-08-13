@@ -15,6 +15,7 @@ def create_http_task(
     queue: str,
     payload: dict,
     task_id: str,
+    headers: dict[str, str] | None = None,
     dispatch_deadline: int | None = None,
     schedule_time: datetime | None = None,
     http_method: Annotated[int, HttpMethod] = HttpMethod.POST,
@@ -26,6 +27,7 @@ def create_http_task(
         url (str): Destination URL
         queue (str): Queue name
         payload (dict): Request JSON payload
+        headers (dict[str, str], optional): Request headers. Defaults to None.
         task_id (str): Task identifier
         dispatch_deadline (int | None, optional): Seconds until the task is dispatched. Defaults to None.
         schedule_time (datetime | None, optional): Time at which the task will be scheduled. Defaults to None.
@@ -36,6 +38,7 @@ def create_http_task(
     """
     client = CloudTasksClient()
 
+    headers = headers or {}
     task_id = f"{task_id}-{round(arrow.utcnow().timestamp())}"
     name = client.task_path(PROJECT_ID, LOCATION, queue, task_id)
 
@@ -43,7 +46,7 @@ def create_http_task(
         url=url,
         http_method=http_method,
         body=json.dumps(payload).encode(),
-        headers={"Content-type": "application/json"},
+        headers={**headers, "Content-type": "application/json"},
     )
 
     task = Task(name=name, http_request=http_request)
