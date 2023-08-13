@@ -44,23 +44,23 @@ class FundingRequest(BaseModel):
         """Returns the hash of the funding request"""
         return hash(self.model_dump_json())
 
-    @computed_field
-    @cached_property
-    def is_completed(self) -> bool:
-        """Checks if the funding request is fully funded"""
-        return self.funded_amount_percentage == Decimal(1)
-
-    @computed_field
     @cached_property
     def profit_rate(self) -> Decimal:
         """Calculates the profit rate for the funding request"""
-        return (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
+        value = (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
+        return round(Decimal(value), ndigits=3)
 
     @computed_field
     @cached_property
     def monthly_profit_rate(self) -> Decimal:
         """Calculates the monthly profit rate for the funding request"""
         return round(self.profit_rate * 30 / self.duration.value, 4)
+
+    @computed_field
+    @cached_property
+    def is_completed(self) -> bool:
+        """Checks if the funding request is fully funded"""
+        return self.funded_amount_percentage == Decimal(1)
 
     @computed_field
     @cached_property
