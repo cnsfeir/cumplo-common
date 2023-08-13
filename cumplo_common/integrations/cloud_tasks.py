@@ -3,11 +3,11 @@ from datetime import datetime
 from typing import Annotated
 
 import arrow
-from google.cloud.tasks_v2 import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, Task
+from google.cloud.tasks_v2 import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, OidcToken, Task
 from google.protobuf.duration_pb2 import Duration
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from cumplo_common.utils.constants import LOCATION, PROJECT_ID
+from cumplo_common.utils.constants import LOCATION, PROJECT_ID, SERVICE_ACCOUNT_EMAIL
 
 
 def create_http_task(
@@ -19,6 +19,7 @@ def create_http_task(
     dispatch_deadline: int | None = None,
     schedule_time: datetime | None = None,
     http_method: Annotated[int, HttpMethod] = HttpMethod.POST,
+    is_internal: bool = True,
 ) -> Task:
     """
     Create an HTTP POST task with a JSON payload.
@@ -32,6 +33,7 @@ def create_http_task(
         dispatch_deadline (int | None, optional): Seconds until the task is dispatched. Defaults to None.
         schedule_time (datetime | None, optional): Time at which the task will be scheduled. Defaults to None.
         http_method (Annotated[int, HttpMethod], optional): HTTP method to use. Defaults to HttpMethod.POST.
+        is_internal (bool, optional): Whether the task is intended for internal use. Defaults to True.
 
     Returns:
         Task: A unit of scheduled work
@@ -48,6 +50,9 @@ def create_http_task(
         body=json.dumps(payload).encode(),
         headers={**headers, "Content-type": "application/json"},
     )
+
+    if is_internal:
+        http_request.oidc_token = OidcToken(service_account_email=SERVICE_ACCOUNT_EMAIL)
 
     task = Task(name=name, http_request=http_request)
 
