@@ -12,7 +12,6 @@ class User(BaseModel):
     name: str = Field(...)
     api_key: str = Field(...)
     is_admin: bool = Field(False)
-    max_notifications: int = Field(1)
     notifications: dict[int, Notification] = Field(default_factory=dict, exclude=True)
     configurations: dict[int, Configuration] = Field(default_factory=dict, exclude=True)
     channels: dict[ChannelType, ChannelConfiguration] = Field(default_factory=dict, exclude=True)
