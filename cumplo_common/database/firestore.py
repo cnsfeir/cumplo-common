@@ -191,7 +191,7 @@ class FirestoreClient:
         logger.info(f"Getting user {id_user} channels from Firestore")
         user_document = self._get_user_document(id_user)
         channels = user_document.collection(CHANNELS_COLLECTION).stream()
-        return {c.id: CHANNEL_CONFIGURATION_BY_TYPE[ChannelType(c.id)](type_=c.id, **c.to_dict()) for c in channels}
+        return {c.id: CHANNEL_CONFIGURATION_BY_TYPE[ChannelType(c.id)](**c.to_dict()) for c in channels}
 
 
 firestore_client = FirestoreClient()
