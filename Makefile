@@ -5,8 +5,9 @@ INSTALLED_VERSION := $(shell python -c "import sys; print(f'{sys.version_info.ma
   check_python_version \
   linters \
   setup_venv \
-  start \
-  build
+  build \
+  publish \
+  _check_pip_configuration
 
 # Checks if the installed Python version matches the required version
 check_python_version:
@@ -33,10 +34,18 @@ linters:
 	poetry run python -m pylint --rcfile=.pylintrc --recursive=y --ignore=.venv --disable=fixme .
 	poetry run python -m mypy --config-file mypy.ini .
 
-# Builds the docker image
+# Builds the library
 build:
-	docker build -f Dockerfile.development -t cumplo-spotter .
+	poetry build
 
 # Starts the API server
-start:
-	docker run -d -p 8080:8080 -v ./:/app cumplo-spotter
+publish:
+	make _check_pip_configuration
+	poetry run twine upload --repository-url https://us-central1-python.pkg.dev/cumplo-scraper/cumplo-pypi/ dist/*
+
+# Checks if the pip configuration file exists in the virtual environment
+_check_pip_configuration:
+	@if [ ! -f .venv/pip.conf ]; then \
+		echo "ERROR: pip.conf not set properly for publishing this library"; \
+		exit 1; \
+	fi
