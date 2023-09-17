@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "0.2.2"
+version = "0.2.4"
 description = "Python library that contains all common logic throughout Cumplo API project"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
 readme = "README.md"
@@ -22,6 +22,9 @@ pylint = "^2.17.5"
 flake8 = "^6.1.0"
 black = "^23.7.0"
 mypy = "^1.4.1"
+keyring = "^24.2.0"
+keyrings-google-artifactregistry-auth = "^1.1.2"
+twine = "^4.0.2"
 
 [build-system]
 requires = ["poetry-core"]
