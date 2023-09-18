@@ -22,4 +22,4 @@ class FilterConfiguration(BaseModel):
 
     def __hash__(self) -> int:
         exclude = {"id", "name", "expiration_minutes"}
-        return hash(self.model_dump_json(exclude=exclude, exclude_defaults=True, exclude_none=True))
+        return hash(self.model_dump_json(exclude=exclude, exclude_none=True))
