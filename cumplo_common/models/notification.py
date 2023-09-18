@@ -3,7 +3,9 @@
 from datetime import datetime
 
 import arrow
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from cumplo_common.models import BaseModel
 
 
 class Notification(BaseModel):

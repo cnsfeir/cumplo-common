@@ -6,8 +6,9 @@ from enum import StrEnum
 from functools import cached_property
 from math import ceil
 
-from pydantic import BaseModel, Field, computed_field
+from pydantic import Field, computed_field
 
+from cumplo_common.models import BaseModel
 from cumplo_common.models.borrower import Borrower
 from cumplo_common.models.credit import CreditType
 from cumplo_common.models.currency import Currency
@@ -39,10 +40,6 @@ class FundingRequest(BaseModel):
     supporting_documents: list[str] = Field(default_factory=list)
     funded_amount_percentage: Decimal = Field(...)
     credit_type: CreditType = Field(...)
-
-    def __hash__(self) -> int:
-        """Returns the hash of the funding request"""
-        return hash(self.model_dump_json())
 
     @cached_property
     def profit_rate(self) -> Decimal:
