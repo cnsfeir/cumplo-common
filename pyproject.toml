@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "0.2.4"
+version = "0.2.5"
 description = "Python library that contains all common logic throughout Cumplo API project"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
 readme = "README.md"
@@ -16,6 +16,7 @@ python-dotenv = "^1.0.0"
 google-cloud-tasks = "^2.14.1"
 types-protobuf = "^4.23.0.2"
 fastapi = "^0.101.0"
+pytest = "^7.4.2"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.17.5"

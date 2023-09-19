@@ -36,12 +36,13 @@ linters:
 
 # Builds the library
 build:
+	rm -rf dist
 	poetry build
 
 # Starts the API server
 publish:
 	make _check_pip_configuration
-	poetry run twine upload --repository-url https://us-central1-python.pkg.dev/cumplo-scraper/cumplo-pypi/ dist/*
+	poetry run twine upload --verbose --repository-url https://us-central1-python.pkg.dev/cumplo-scraper/cumplo-pypi/ dist/*
 
 # Checks if the pip configuration file exists in the virtual environment
 _check_pip_configuration:

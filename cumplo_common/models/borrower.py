@@ -3,8 +3,9 @@
 from decimal import Decimal
 from functools import cached_property
 
-from pydantic import BaseModel, Field, computed_field, field_validator
+from pydantic import Field, computed_field, field_validator
 
+from cumplo_common.models import BaseModel
 from cumplo_common.models.pydantic import ValidatorMode
 
 
