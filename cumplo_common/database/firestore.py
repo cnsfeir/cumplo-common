@@ -75,16 +75,16 @@ class FirestoreClient:
             **user_data,
         )
 
-    def put_notification(self, id_user: str, id_funding_request: int) -> None:
+    def put_notification(self, id_user: str, id_notification: str) -> None:
         """
         Creates or updates the notification for a given user and funding request
 
         Args:
             id_user (str): The user ID which owns the notification
-            id_funding_request (int): The funding request ID
+            id_notification (str): The funding request ID
         """
-        logger.info(f"Updating notification for funding request {id_funding_request} at Firestore")
-        notification = self._get_notification_document(id_user, id_funding_request)
+        logger.info(f"Updating notification for funding request {id_notification} at Firestore")
+        notification = self._get_notification_document(id_user, id_notification)
         notification.set({"date": arrow.utcnow().datetime})
 
     def put_filter(self, id_user: str, configuration: FilterConfiguration) -> None:
@@ -111,16 +111,16 @@ class FirestoreClient:
         channel_reference = self._get_channel_document(id_user, channel.type_)
         channel_reference.set(channel.model_dump())
 
-    def delete_notification(self, id_user: str, id_funding_request: int) -> None:
+    def delete_notification(self, id_user: str, id_notification: str) -> None:
         """
         Deletes a notification of a funding request for a given user
 
         Args:
             id_user (str): The user ID which owns the notification
-            id_funding_request (int): The funding request ID to be deleted
+            id_notification (str): The ID of the notification to be deleted
         """
-        logger.info(f"Deleting notification {id_funding_request} from Firestore")
-        notification = self._get_notification_document(id_user, id_funding_request)
+        logger.info(f"Deleting notification {id_notification} from Firestore")
+        notification = self._get_notification_document(id_user, id_notification)
         notification.delete()
 
     def delete_filter(self, id_user: str, id_filter: int) -> None:
@@ -151,10 +151,10 @@ class FirestoreClient:
         """Gets a user document reference"""
         return self.client.collection(USERS_COLLECTION).document(id_user)
 
-    def _get_notification_document(self, id_user: str, id_funding_request: int) -> DocumentReference:
+    def _get_notification_document(self, id_user: str, id_notification: str) -> DocumentReference:
         """Gets a notification document reference"""
         user_document = self._get_user_document(id_user)
-        return user_document.collection(NOTIFICATIONS_COLLECTION).document(str(id_funding_request))
+        return user_document.collection(NOTIFICATIONS_COLLECTION).document(id_notification)
 
     def _get_filter_document(self, id_user: str, id_filter: int) -> DocumentReference:
         """Gets a configuration document reference"""
@@ -166,14 +166,17 @@ class FirestoreClient:
         user_document = self._get_user_document(id_user)
         return user_document.collection(CHANNELS_COLLECTION).document(str(channel_type))
 
-    def _get_user_notifications(self, id_user: str) -> dict[int, Notification]:
+    def _get_user_notifications(self, user: User) -> dict[int, Notification]:
         """
         Gets the user notifications data
         """
-        logger.info(f"Getting user {id_user} notifications from Firestore")
-        user_document = self._get_user_document(id_user)
+        logger.info(f"Getting user {user.id} notifications from Firestore")
+        user_document = self._get_user_document(user.id)
         notifications = user_document.collection(NOTIFICATIONS_COLLECTION).stream()
-        return {int(n.id): Notification(id=int(n.id), **n.to_dict()) for n in notifications}
+        return {
+            int(n.id): Notification(id=n.id, expiration_minutes=user.expiration_minutes, **n.to_dict())
+            for n in notifications
+        }
 
     def _get_user_filters(self, id_user: str) -> dict[int, FilterConfiguration]:
         """
