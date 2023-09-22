@@ -166,7 +166,7 @@ class FirestoreClient:
         user_document = self._get_user_document(id_user)
         return user_document.collection(CHANNELS_COLLECTION).document(str(channel_type))
 
-    def _get_user_notifications(self, user: User) -> dict[int, Notification]:
+    def _get_user_notifications(self, user: User) -> dict[str, Notification]:
         """
         Gets the user notifications data
         """
@@ -174,7 +174,7 @@ class FirestoreClient:
         user_document = self._get_user_document(user.id)
         notifications = user_document.collection(NOTIFICATIONS_COLLECTION).stream()
         return {
-            int(n.id): Notification(id=n.id, expiration_minutes=user.expiration_minutes, **n.to_dict())
+            n.id: Notification(id=n.id, expiration_minutes=user.expiration_minutes, **n.to_dict())
             for n in notifications
         }
 
