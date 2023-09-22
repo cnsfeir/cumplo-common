@@ -54,3 +54,16 @@ class Notification(BaseModel):
         """
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) < arrow.utcnow()
 
+    @staticmethod
+    def build_id(template: Template, content_id: int) -> str:
+        """
+        Builds the ID for a notification
+
+        Args:
+            template (Template): Notification template
+            content_id (int): Notification content ID
+
+        Returns:
+            str: Notification ID
+        """
+        return f"{template.value}_{content_id}"
