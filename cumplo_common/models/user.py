@@ -16,7 +16,7 @@ class User(BaseModel):
     is_admin: bool = Field(False)
     name: str = Field(..., max_length=30)
     credentials: Credentials = Field(...)
-    expiration_minutes: PositiveInt | None = Field(DEFAULT_EXPIRATION_MINUTES)
+    expiration_minutes: PositiveInt = Field(DEFAULT_EXPIRATION_MINUTES)
     filters: dict[int, FilterConfiguration] = Field(default_factory=dict, exclude=True)
     notifications: dict[int, Notification] = Field(default_factory=dict, exclude=True)
     channels: dict[ChannelType, ChannelConfiguration] = Field(default_factory=dict, exclude=True)
