@@ -18,5 +18,5 @@ class User(BaseModel):
     credentials: Credentials = Field(...)
     expiration_minutes: PositiveInt = Field(DEFAULT_EXPIRATION_MINUTES)
     filters: dict[int, FilterConfiguration] = Field(default_factory=dict, exclude=True)
-    notifications: dict[int, Notification] = Field(default_factory=dict, exclude=True)
+    notifications: dict[str, Notification] = Field(default_factory=dict, exclude=True)
     channels: dict[ChannelType, ChannelConfiguration] = Field(default_factory=dict, exclude=True)
