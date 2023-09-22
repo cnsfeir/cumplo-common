@@ -16,6 +16,7 @@ class ChannelType(StrEnum):
 
 class ChannelConfiguration(BaseModel):
     type_: ChannelType = Field(..., exclude=True)
+    enabled: bool = Field(True)
 
 
 class WebhookConfiguration(ChannelConfiguration):
