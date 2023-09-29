@@ -1,12 +1,23 @@
 from abc import ABC
+from collections.abc import Generator
 from json import loads
-from typing import Any
+from typing import Any, Self
 
 from pydantic import BaseModel as PydanticBaseModel
+from pydantic import ConfigDict
 
 
 class BaseModel(PydanticBaseModel, ABC):
     """Base class for all models in the project"""
+
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        str_strip_whitespace=True,
+        validate_assignment=True,
+        validate_default=True,
+        extra="forbid",
+        frozen=True,
+    )
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json(exclude_none=True))
