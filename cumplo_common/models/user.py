@@ -1,6 +1,7 @@
 # pylint: disable=no-member
 
 from pydantic import Field, PositiveInt
+import ulid
 
 from cumplo_common.models import BaseModel
 from cumplo_common.models.channel import ChannelConfiguration, ChannelType
@@ -11,7 +12,7 @@ from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 
 
 class User(BaseModel):
-    id: str = Field(...)
+    id: ulid.ULID = Field(...)
     api_key: str = Field(...)
     is_admin: bool = Field(False)
     name: str = Field(..., max_length=30)
