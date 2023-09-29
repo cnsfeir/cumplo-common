@@ -1,8 +1,8 @@
 # pylint: disable=arguments-differ, invalid-name
 
-from enum import StrEnum
 from typing import Self
 
+from cumplo_common.models import StrEnum
 from cumplo_common.models.topic import Topic
 
 

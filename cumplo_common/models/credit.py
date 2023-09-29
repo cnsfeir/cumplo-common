@@ -1,4 +1,4 @@
-from enum import StrEnum
+from cumplo_common.models import StrEnum
 
 
 class CreditType(StrEnum):

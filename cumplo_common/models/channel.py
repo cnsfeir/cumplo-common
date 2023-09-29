@@ -1,9 +1,8 @@
-from enum import StrEnum
 from typing import Any
 
 from pydantic import Field
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models import BaseModel, StrEnum
 
 
 class ChannelType(StrEnum):
