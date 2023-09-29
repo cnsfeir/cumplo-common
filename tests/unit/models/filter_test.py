@@ -12,8 +12,8 @@ class TestFilterConfiguration:
 
     def test_equal_ignored_attributes(self) -> None:
         """Should ignore the ID, name and expiration_minutes when comparing two filters"""
-        filter_1 = TypeAdapter(FilterConfiguration).validate_python({"id": 1, "name": "Name", "expiration_minutes": 15})
-        filter_2 = TypeAdapter(FilterConfiguration).validate_python({"id": 2, "name": "Name", "expiration_minutes": 15})
+        filter_1 = TypeAdapter(FilterConfiguration).validate_python({"id": 1, "name": "Name"})
+        filter_2 = TypeAdapter(FilterConfiguration).validate_python({"id": 2, "name": "Name"})
         assert filter_1 == filter_2
 
     def test_equal_same_attributes(self) -> None:
