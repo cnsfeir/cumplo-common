@@ -6,11 +6,11 @@ from cumplo_common.models import BaseModel, StrEnum
 
 
 class ChannelType(StrEnum):
-    TELEGRAM = "telegram"
-    WEBHOOK = "webhook"
-    MAILGUN = "mailgun"
-    IFTTT = "ifttt"
-    SLACK = "slack"
+    TELEGRAM = "TELEGRAM"
+    WEBHOOK = "WEBHOOK"
+    MAILGUN = "MAILGUN"
+    IFTTT = "IFTTT"
+    SLACK = "SLACK"
 
 
 class ChannelConfiguration(BaseModel):
