@@ -7,7 +7,7 @@ from fastapi import Header
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 
-from cumplo_common.database.firestore import firestore_client
+from cumplo_common.database import firestore
 
 
 async def authenticate(request: Request, x_api_key: Annotated[str | None, Header()] = None) -> None:
@@ -25,7 +25,7 @@ async def authenticate(request: Request, x_api_key: Annotated[str | None, Header
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
     try:
-        user = firestore_client.get_user(x_api_key)
+        user = firestore.client.users.get(api_key=x_api_key)
     except (KeyError, ValueError):
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
