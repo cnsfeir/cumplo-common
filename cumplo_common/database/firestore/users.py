@@ -71,7 +71,13 @@ class UserCollection:
         logger.info("Getting all users from Firestore")
         for user in self.collection.stream():
             if data := user.to_dict():
-                yield User(id=user.id, **data)
+                yield User(
+                    id=user.id,
+                    filters_query=FilterCollection(self).get_all,
+                    channels_query=ChannelCollection(self).get_all,
+                    notifications_query=NotificationCollection(self).get_all,
+                    **data,
+                )
 
     def put(self, user: User) -> None:
         """
