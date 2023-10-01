@@ -2,13 +2,12 @@
 # mypy: disable-error-code="misc"
 
 from decimal import Decimal
-from enum import StrEnum
 from functools import cached_property
 from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models import BaseModel, StrEnum
 from cumplo_common.models.borrower import Borrower
 from cumplo_common.models.credit import CreditType
 from cumplo_common.models.currency import Currency

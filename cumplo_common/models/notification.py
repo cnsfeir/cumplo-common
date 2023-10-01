@@ -38,7 +38,7 @@ class Notification(BaseModel):
         if not fullmatch(r"^[a-zA-Z]+_\d+$", id_):
             raise ValueError("Invalid ID format")
 
-        values["template"], values["content_id"] = id_.lower().split("_")
+        values["template"], values["content_id"] = id_.split("_")
         return values
 
     @property

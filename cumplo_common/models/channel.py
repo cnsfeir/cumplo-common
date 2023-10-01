@@ -1,17 +1,16 @@
-from enum import StrEnum
 from typing import Any
 
 from pydantic import Field
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models import BaseModel, StrEnum
 
 
 class ChannelType(StrEnum):
-    TELEGRAM = "telegram"
-    WEBHOOK = "webhook"
-    MAILGUN = "mailgun"
-    IFTTT = "ifttt"
-    SLACK = "slack"
+    TELEGRAM = "TELEGRAM"
+    WEBHOOK = "WEBHOOK"
+    MAILGUN = "MAILGUN"
+    IFTTT = "IFTTT"
+    SLACK = "SLACK"
 
 
 class ChannelConfiguration(BaseModel):
