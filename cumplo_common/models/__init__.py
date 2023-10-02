@@ -5,7 +5,7 @@ from json import loads
 from typing import Any, Self
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import ConfigDict
+from pydantic import ConfigDict, model_validator
 
 
 class BaseModel(PydanticBaseModel, ABC):
@@ -40,6 +40,17 @@ class BaseModel(PydanticBaseModel, ABC):
             dict: JSON parsed dict representation of the model
         """
         return loads(self.model_dump_json(exclude_none=True, *args, **kwargs))
+
+    @model_validator(mode="before")
+    @classmethod
+    def _ignore_computed_fields(cls, values: dict) -> dict:
+        """
+        Ignores computed fields when validating the model
+        """
+        for definition in cls.__dict__.get("__pydantic_core_schema__", {}).get("definitions", []):
+            for computed_field in definition.get("schema", {}).get("schema", {}).get("computed_fields", []):
+                values.pop(computed_field.get("property_name"), None)
+        return values
 
 
 class StrEnum(enum.StrEnum):

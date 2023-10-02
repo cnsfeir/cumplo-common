@@ -1,3 +1,3 @@
-"""Python library that contains all common logic throughout Cumplo API project"""
+"""A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"""
 
-__version__ = "0.2.9"
+__version__ = "0.2.10"
