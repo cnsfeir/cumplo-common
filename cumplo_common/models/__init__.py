@@ -47,9 +47,13 @@ class BaseModel(PydanticBaseModel, ABC):
         """
         Ignores computed fields when validating the model
         """
-        for definition in cls.__dict__.get("__pydantic_core_schema__", {}).get("definitions", []):
-            for computed_field in definition.get("schema", {}).get("schema", {}).get("computed_fields", []):
-                values.pop(computed_field.get("property_name"), None)
+        if not (core_schema := cls.__dict__.get("__pydantic_core_schema__")):
+            return values
+
+        for definition in core_schema.get("definitions", [core_schema]):
+            for field in definition.get("schema", {}).get("schema", {}).get("computed_fields", []):
+                values.pop(field.get("property_name"), None)
+
         return values
 
 
