@@ -3,7 +3,6 @@ name = "cumplo-common"
 version = "0.2.10"
 description = "Python library that contains all common logic throughout Cumplo API project"
 authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
-readme = "README.md"
 packages = [{ include = "cumplo_common" }]
 
 [tool.poetry.dependencies]
