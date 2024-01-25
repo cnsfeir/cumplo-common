@@ -1,4 +1,4 @@
-from cumplo_common.models import StrEnum
+from cumplo_common.models.base_model import StrEnum
 
 
 class ValidatorMode(StrEnum):

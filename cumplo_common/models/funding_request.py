@@ -7,7 +7,7 @@ from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.models import BaseModel, StrEnum
+from cumplo_common.models.base_model import BaseModel, StrEnum
 from cumplo_common.models.borrower import Borrower
 from cumplo_common.models.credit import CreditType
 from cumplo_common.models.currency import Currency

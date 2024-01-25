@@ -2,7 +2,7 @@
 
 from pydantic import Field
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models.base_model import BaseModel
 
 
 class Credentials(BaseModel):

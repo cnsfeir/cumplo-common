@@ -5,7 +5,7 @@ from functools import cached_property
 
 from pydantic import ConfigDict, Field, computed_field
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models.base_model import BaseModel
 
 
 class Borrower(BaseModel):
