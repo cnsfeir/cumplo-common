@@ -14,6 +14,7 @@ class Client:
         self.__init_collections__()
 
     def __init_collections__(self) -> None:
+        """Initializes the collections"""
         self.users = UserCollection(self.client)
         self.filters = FilterCollection(self.client)
         self.channels = ChannelCollection(self.client)
