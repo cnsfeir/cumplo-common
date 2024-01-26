@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import Field
 
-from cumplo_common.models import BaseModel, StrEnum
+from cumplo_common.models.base_model import BaseModel, StrEnum
 
 
 class ChannelType(StrEnum):

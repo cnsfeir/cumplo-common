@@ -7,7 +7,7 @@ from functools import cached_property
 import ulid
 from pydantic import Field, PositiveInt, field_validator
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models.base_model import BaseModel
 from cumplo_common.models.channel import ChannelConfiguration, ChannelType
 from cumplo_common.models.credentials import Credentials
 from cumplo_common.models.filter import FilterConfiguration

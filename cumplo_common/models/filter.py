@@ -6,7 +6,7 @@ from decimal import Decimal
 import ulid
 from pydantic import Field, PositiveInt, field_validator
 
-from cumplo_common.models import BaseModel
+from cumplo_common.models.base_model import BaseModel
 from cumplo_common.models.pydantic import ValidatorMode
 
 

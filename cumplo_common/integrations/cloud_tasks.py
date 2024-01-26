@@ -3,14 +3,14 @@ from datetime import datetime
 from typing import Annotated
 
 import arrow
-from google.cloud.tasks_v2 import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, OidcToken, Task
+from google.cloud.tasks import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, OidcToken, Task
 from google.protobuf.duration_pb2 import Duration
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from cumplo_common.utils.constants import LOCATION, PROJECT_ID, SERVICE_ACCOUNT_EMAIL
 
 
-def create_http_task(
+def create_http_task(  # pylint: disable=too-many-arguments,too-many-locals
     url: str,
     queue: str,
     payload: dict,

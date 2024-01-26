@@ -18,9 +18,9 @@ check_python_version:
 
 # Creates a virtual environment and installs dependencies
 setup_venv:
-	make check_python_version
-	rm -rf .venv
-	poetry install
+	@make check_python_version
+	@rm -rf .venv
+	@poetry install
 
 # Runs linters
 linters:
@@ -29,20 +29,20 @@ linters:
 		make setup_venv; \
 	fi
 
-	poetry run python -m black --check --line-length=120 .
-	poetry run python -m flake8 --config .flake8
-	poetry run python -m pylint --rcfile=.pylintrc --recursive=y --ignore=.venv --disable=fixme .
-	poetry run python -m mypy --config-file mypy.ini .
+	@poetry run python -m black --check --line-length=120 .
+	@poetry run python -m flake8 --config .flake8
+	@poetry run python -m pylint --rcfile=.pylintrc --recursive=y --ignore=.venv --disable=fixme .
+	@poetry run python -m mypy --config-file mypy.ini .
 
 # Builds the library
 build:
-	rm -rf dist
-	poetry build
+	@rm -rf dist
+	@poetry build
 
 # Starts the API server
 publish:
-	make _check_pip_configuration
-	poetry run twine upload --verbose --repository-url https://us-central1-python.pkg.dev/cumplo-scraper/cumplo-pypi/ dist/*
+	@make _check_pip_configuration
+	@poetry run twine upload --verbose --repository-url https://us-central1-python.pkg.dev/cumplo-scraper/cumplo-pypi/ dist/*
 
 # Checks if the pip configuration file exists in the virtual environment
 _check_pip_configuration:

@@ -2,7 +2,7 @@
 
 from typing import Self
 
-from cumplo_common.models import StrEnum
+from cumplo_common.models.base_model import StrEnum
 from cumplo_common.models.topic import Topic
 
 

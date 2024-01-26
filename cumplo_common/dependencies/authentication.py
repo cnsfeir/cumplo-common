@@ -12,7 +12,7 @@ from cumplo_common.database import firestore
 
 async def authenticate(request: Request, x_api_key: Annotated[str | None, Header()] = None) -> None:
     """
-    Authenticates a request using the X-API-KEY header
+    Authenticates a request using either the X-API-KEY header or the user's ID in the event attributes.
 
     Args:
         request (Request): The request to authenticate
@@ -21,12 +21,19 @@ async def authenticate(request: Request, x_api_key: Annotated[str | None, Header
     Raises:
         HTTPException: When the API key is not present or invalid
     """
-    if not x_api_key:
-        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+    if x_api_key:
+        try:
+            user = firestore.client.users.get(api_key=x_api_key)
+        except (KeyError, ValueError):
+            raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
-    try:
-        user = firestore.client.users.get(api_key=x_api_key)
-    except (KeyError, ValueError):
+    elif event := getattr(request.state, "event", None):
+        try:
+            user = firestore.client.users.get(id_user=event.id_user)
+        except (KeyError, ValueError):
+            raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
+
+    else:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
     request.state.user = user
