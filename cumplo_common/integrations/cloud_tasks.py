@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Annotated
 
 import arrow
-from google.cloud.tasks_v2 import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, OidcToken, Task
+from google.cloud.tasks import CloudTasksClient, CreateTaskRequest, HttpMethod, HttpRequest, OidcToken, Task
 from google.protobuf.duration_pb2 import Duration
 from google.protobuf.timestamp_pb2 import Timestamp
 
