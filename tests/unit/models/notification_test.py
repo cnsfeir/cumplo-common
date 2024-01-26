@@ -14,7 +14,7 @@ class TestNotification:
         for id_ in invalid_ids:
             with raises(ValueError) as error:
                 TypeAdapter(Notification).validate_python({"id": id_, **self.base_notification})
-                assert str(error.value) == "Invalid ID format"
+            assert str(error.value) == "Invalid ID format"
 
     def test_invalid_id_values(self) -> None:
         """Should raise a ValueError if the ID value is invalid"""
