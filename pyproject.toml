@@ -2,7 +2,7 @@
 name = "cumplo-common"
 version = "0.2.11"
 description = "A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"
-authors = ["Cristobal Sfeir <cnsfeir@uc.cl>"]
+authors = ["Cristobal Sfeir <hello@crisotbalsfeir.com>"]
 packages = [{ include = "cumplo_common" }]
 
 [tool.poetry.dependencies]
