@@ -1,6 +1,6 @@
 from cumplo_common.models.base_model import StrEnum
 
 
-class Topic(StrEnum):
+class Subject(StrEnum):
     FUNDING_REQUESTS = "funding-requests"
     INVESTMENTS = "investments"
