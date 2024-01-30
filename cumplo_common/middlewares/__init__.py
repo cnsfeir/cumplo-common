@@ -1,0 +1,1 @@
+from cumplo_common.middlewares.pubsub import PubSubMiddleware
