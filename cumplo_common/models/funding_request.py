@@ -24,7 +24,7 @@ class FundingRequestDuration(BaseModel):
     value: int = Field(...)
 
     def __str__(self) -> str:
-        return f"{self.value} {self.unit}"
+        return f"{self.value} {self.unit.lower()}s"
 
 
 class FundingRequest(BaseModel):

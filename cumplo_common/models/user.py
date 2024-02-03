@@ -10,7 +10,7 @@ from pydantic import Field, PositiveInt, field_validator
 from cumplo_common.models.base_model import BaseModel
 from cumplo_common.models.channel import ChannelConfiguration, ChannelType
 from cumplo_common.models.credentials import Credentials
-from cumplo_common.models.filter import FilterConfiguration
+from cumplo_common.models.filter_configuration import FilterConfiguration
 from cumplo_common.models.notification import Notification
 from cumplo_common.models.pydantic import ValidatorMode
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
