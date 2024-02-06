@@ -55,7 +55,7 @@ class FilterCollection(UserSubcollection):
 
         Args:
             id_user (str): The user ID which owns the configuration
-            configuration (Configuration): The new filter data to be upserted
+            data (FilterConfiguration): The filter configuration to be upserted
         """
         logger.info(f"Upserting configuration {data.id} of user {id_user} into Firestore")
         document = self._collection(id_user).document(str(data.id))
