@@ -1,7 +1,6 @@
 import json
 from base64 import b64decode
 from collections.abc import Awaitable, Callable
-from typing import Optional
 
 from fastapi import Request, Response
 from pydantic import BaseModel, Field, TypeAdapter
@@ -11,7 +10,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 class PubSubMessage(BaseModel):
     """A wrapped Pub/Sub message"""
 
-    publish_time: Optional[str] = Field(None)
+    publish_time: str | None = Field(None)
     attributes: dict = Field(default_factory=dict)
     message_id: str = Field(alias="messageId")
     data: str = Field(...)

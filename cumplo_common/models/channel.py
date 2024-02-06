@@ -14,7 +14,7 @@ class ChannelType(StrEnum):
 
 
 class ChannelConfiguration(BaseModel):
-    type_: ChannelType = Field(..., exclude=True)
+    type_: ChannelType = Field(...)
     enabled: bool = Field(True)
 
 
