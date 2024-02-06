@@ -1,3 +1,6 @@
+include .env
+export
+
 PYTHON_VERSION := $(shell python -c "print(open('.python-version').read().strip())")
 INSTALLED_VERSION := $(shell python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 
@@ -7,7 +10,8 @@ INSTALLED_VERSION := $(shell python -c "import sys; print(f'{sys.version_info.ma
   setup_venv \
   build \
   publish \
-  _check_pip_configuration
+  _check_pip_configuration \
+  login
 
 # Checks if the installed Python version matches the required version
 check_python_version:
@@ -50,3 +54,7 @@ _check_pip_configuration:
 		echo "ERROR: pip.conf not set properly for publishing this library"; \
 		exit 1; \
 	fi
+
+login:
+	@gcloud config configurations activate $(PROJECT_ID)
+	@gcloud auth application-default login
