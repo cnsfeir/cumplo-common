@@ -45,20 +45,12 @@ class PubSubMiddleware(BaseHTTPMiddleware):
             body = await request.body()
             content = json.loads(body.decode("utf-8"))
             event = PubSubEvent.model_validate(content)
+
         except ValueError:
-            self._rebuild_body(request, body)
+            pass
+
         else:
-            request.state.event = event
-            self._rebuild_body(request, b64decode(event.message.data))
+            request._body = b64decode(event.message.data)  # pylint: disable=protected-access
 
         response = await call_next(request)
         return response
-
-    @staticmethod
-    def _rebuild_body(request: Request, data: bytes) -> None:
-        """Rebuilds the request body"""
-
-        async def receive() -> dict:
-            return {"type": "http.request", "body": data}
-
-        request._receive = receive  # pylint: disable=protected-access
