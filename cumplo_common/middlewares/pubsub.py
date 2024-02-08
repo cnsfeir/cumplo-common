@@ -3,7 +3,7 @@ from base64 import b64decode
 from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
-from pydantic import BaseModel, Field, TypeAdapter
+from pydantic import BaseModel, Field
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
@@ -44,7 +44,7 @@ class PubSubMiddleware(BaseHTTPMiddleware):
         try:
             body = await request.body()
             content = json.loads(body.decode("utf-8"))
-            event = TypeAdapter(PubSubEvent).validate_python(content)
+            event = PubSubEvent.model_validate(content)
         except ValueError:
             self._rebuild_body(request, body)
         else:

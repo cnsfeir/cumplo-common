@@ -1,16 +1,11 @@
-from typing import Any
-
 from pydantic import Field
 
 from cumplo_common.models.base_model import BaseModel, StrEnum
 
 
 class ChannelType(StrEnum):
-    TELEGRAM = "TELEGRAM"
     WEBHOOK = "WEBHOOK"
-    MAILGUN = "MAILGUN"
     IFTTT = "IFTTT"
-    SLACK = "SLACK"
 
 
 class ChannelConfiguration(BaseModel):
@@ -20,16 +15,12 @@ class ChannelConfiguration(BaseModel):
 
 class WebhookConfiguration(ChannelConfiguration):
     url: str = Field(...)
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(type_=ChannelType.WEBHOOK, *args, **kwargs)
+    type_: ChannelType = ChannelType.WEBHOOK
 
 
 class IFTTTConfiguration(ChannelConfiguration):
     key: str = Field(...)
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(type_=ChannelType.IFTTT, *args, **kwargs)
+    type_: ChannelType = ChannelType.IFTTT
 
 
 CHANNEL_CONFIGURATION_BY_TYPE: dict[ChannelType, type[ChannelConfiguration]] = {

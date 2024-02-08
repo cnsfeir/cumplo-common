@@ -59,7 +59,7 @@ class ChannelCollection(UserSubcollection):
         """
         logger.info(f"Upserting channel {data.type_} of user {id_user} into Firestore")
         document = self._collection(id_user).document(str(data.type_))
-        document.set(data.json())
+        document.set(data.json(exclude={"type_"}))
 
     def delete(self, id_user: str, id_document: str) -> None:
         """
