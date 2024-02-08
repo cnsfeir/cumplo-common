@@ -14,7 +14,7 @@ babel = "^2.12.1"
 python-dotenv = "^1.0.0"
 google-cloud-tasks = "^2.14.1"
 types-protobuf = "^4.23.0.2"
-fastapi = "^0.101.0"
+fastapi = "^0.109.1"
 ulid-py = "^1.1.0"
 google-cloud-pubsub = "^2.18.4"
 
