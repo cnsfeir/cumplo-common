@@ -6,6 +6,7 @@ from typing import Any, Self
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict, model_validator
+from ulid import ULID
 
 
 class BaseModel(PydanticBaseModel, ABC):
@@ -14,6 +15,7 @@ class BaseModel(PydanticBaseModel, ABC):
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
         str_strip_whitespace=True,
+        json_encoders={ULID: str},
         validate_assignment=True,
         validate_default=True,
         extra="forbid",

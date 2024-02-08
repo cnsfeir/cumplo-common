@@ -59,7 +59,7 @@ class FilterCollection(UserSubcollection):
         """
         logger.info(f"Upserting configuration {data.id} of user {id_user} into Firestore")
         document = self._collection(id_user).document(str(data.id))
-        document.set(data.json())
+        document.set(data.json(exclude={"id"}))
 
     def delete(self, id_user: str, id_document: str) -> None:
         """
