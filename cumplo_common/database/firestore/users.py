@@ -88,7 +88,7 @@ class UserCollection:
         """
         logger.info(f"Upserting user {user.id} into Firestore")
         document = self.collection.document(str(user.id))
-        document.set(user.json())
+        document.set(user.json(exclude={"id"}))
 
     def delete(self, id_user: str) -> None:
         """
