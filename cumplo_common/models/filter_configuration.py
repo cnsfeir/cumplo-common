@@ -2,12 +2,14 @@
 # pylint: disable=no-member
 
 from decimal import Decimal
+from json import loads
+from typing import Any
 
 import ulid
 from pydantic import Field, PositiveInt, field_validator
-from cumplo_common.models.credit import CreditType
 
 from cumplo_common.models.base_model import BaseModel
+from cumplo_common.models.credit import CreditType
 from cumplo_common.models.pydantic import ValidatorMode
 
 
@@ -45,3 +47,12 @@ class FilterConfiguration(BaseModel):
     def __hash__(self) -> int:
         """Returns the hash of the object"""
         return hash(self.model_dump_json(exclude={"id", "name"}, exclude_none=True))
+
+    def json(self, *args: Any, **kwargs: Any) -> dict:  # type: ignore[override]
+        """
+        Returns the model as a JSON parsed dict
+
+        Returns:
+            dict: JSON parsed dict representation of the model
+        """
+        return loads(self.model_dump_json(exclude_defaults=True, *args, **kwargs))
