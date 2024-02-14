@@ -48,6 +48,7 @@ class PubSubMiddleware(BaseHTTPMiddleware):
             body = await request.body()
             content = json.loads(body.decode("utf-8"))
             event = PubSubEvent.model_validate(content)
+            request.state.event = event
 
         except ValueError:
             logger.debug("Received a non-PubSub request")
