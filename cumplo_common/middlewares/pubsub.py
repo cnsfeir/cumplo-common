@@ -1,10 +1,13 @@
 import json
 from base64 import b64decode
 from collections.abc import Awaitable, Callable
+from logging import getLogger
 
 from fastapi import Request, Response
 from pydantic import BaseModel, Field
 from starlette.middleware.base import BaseHTTPMiddleware
+
+logger = getLogger(__name__)
 
 
 class PubSubMessage(BaseModel):
@@ -47,7 +50,7 @@ class PubSubMiddleware(BaseHTTPMiddleware):
             event = PubSubEvent.model_validate(content)
 
         except ValueError:
-            pass
+            logger.debug("Received a non-PubSub request")
 
         else:
             request._body = b64decode(event.message.data)  # pylint: disable=protected-access
