@@ -52,7 +52,7 @@ class Notification(BaseModel):
         Returns:
             bool: Whether the notification has expired or not
         """
-        return arrow.get(self.date).shift(minutes=self.expiration_minutes) < arrow.utcnow()
+        return arrow.get(self.date).shift(minutes=self.expiration_minutes) > arrow.utcnow()
 
     @staticmethod
     def build_id(template: Template, content_id: int) -> str:
