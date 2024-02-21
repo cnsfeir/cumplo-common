@@ -1,36 +1,39 @@
 # mypy: disable-error-code="misc, call-overload"
 
+from datetime import datetime
 from decimal import Decimal
 from functools import cached_property
 
 from pydantic import ConfigDict, Field, computed_field
 
 from cumplo_common.models.base_model import BaseModel
+from cumplo_common.utils.constants import DICOM_STRINGS
+
+
+class BorrowerPortfolio(BaseModel):
+    active: int = Field(...)
+    completed: int = Field(...)
+    total_amount: int = Field(...)
+    total_requests: int = Field(...)
+    in_time: Decimal = Field(...)
+    cured: Decimal = Field(...)
+    delinquent: Decimal = Field(...)
+    outstanding: Decimal = Field(...)
 
 
 class Borrower(BaseModel):
     model_config = ConfigDict(str_to_upper=True)
 
     id: int | None = Field(None)
-    dicom: bool = Field(...)
     name: str | None = Field(None)
-    irs_sector: str | None = Field(None)
-    funding_requests_count: int = Field(0)
-    total_amount_requested: int = Field(0)
+    sector: str | None = Field(None)
+    description: str | None = Field(None)
+    first_appearance: datetime = Field(...)
     average_days_delinquent: int = Field(...)
-    paid_funding_requests_count: int = Field(0)
-    paid_in_time_percentage: Decimal = Field(...)
+    portfolio: BorrowerPortfolio = Field(...)
 
     @computed_field
     @cached_property
-    def paid_funding_requests_percentage(self) -> Decimal:
-        """Returns the percentage of instalments paid in time"""
-        if not self.funding_requests_count:
-            return Decimal(0)
-        return round(Decimal(self.paid_funding_requests_count / self.funding_requests_count), ndigits=2)
-
-    @computed_field
-    @cached_property
-    def amount_paid_in_time(self) -> int:
-        """Returns the amount paid in time"""
-        return round(self.total_amount_requested * self.paid_funding_requests_percentage)
+    def dicom(self) -> bool | None:
+        """Returns True if the borrower is in DICOM"""
+        return any(string in self.description for string in DICOM_STRINGS) if self.description else None
