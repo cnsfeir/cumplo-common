@@ -29,7 +29,7 @@ class Borrower(BaseModel):
     sector: str | None = Field(None)
     description: str | None = Field(None)
     first_appearance: datetime = Field(...)
-    average_days_delinquent: int = Field(...)
+    average_days_delinquent: int | None = Field(None)
     portfolio: BorrowerPortfolio = Field(...)
 
     @computed_field

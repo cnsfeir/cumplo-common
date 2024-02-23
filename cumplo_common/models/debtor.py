@@ -25,7 +25,7 @@ class Debtor(BaseModel):
     name: str | None = Field(None)
     sector: str | None = Field(None)
     portfolio: DebtPortfolio = Field(...)
-    description: str | None = Field(...)
+    description: str | None = Field(None)
     first_appearance: datetime = Field(...)
 
     @computed_field
