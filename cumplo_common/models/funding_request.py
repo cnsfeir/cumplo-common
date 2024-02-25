@@ -49,8 +49,8 @@ class FundingRequest(BaseModel):
     borrower: Borrower = Field(...)
     currency: Currency = Field(...)
 
-    @cached_property
     @computed_field
+    @cached_property
     def profit_rate(self) -> Decimal:
         """Calculates the profit rate for the funding request"""
         if self.installments > 1:
@@ -59,21 +59,21 @@ class FundingRequest(BaseModel):
             value = (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
         return round(Decimal(value), ndigits=4)
 
-    @cached_property
     @computed_field
+    @cached_property
     def monthly_profit_rate(self) -> Decimal:
         """Calculates the monthly profit rate for the funding request"""
         value = (1 + self.irr / 100) ** Decimal(1 / 12) - 1
         return round(Decimal(value), ndigits=4)
 
-    @cached_property
     @computed_field
+    @cached_property
     def is_completed(self) -> bool:
         """Checks if the funding request is fully funded"""
         return self.funded_percentage == Decimal(1)
 
-    @cached_property
     @computed_field
+    @cached_property
     def url(self) -> str:
         """Builds the URL for the funding request"""
         return f"{CUMPLO_BASE_URL}/{self.id}"
