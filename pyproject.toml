@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "1.0.0"
+version = "1.0.1"
 description = "A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"
 authors = ["Cristobal Sfeir <hello@crisotbalsfeir.com>"]
 packages = [{ include = "cumplo_common" }]
@@ -17,7 +17,6 @@ types-protobuf = "^4.23.0.2"
 fastapi = "^0.109.1"
 ulid-py = "^1.1.0"
 google-cloud-pubsub = "^2.18.4"
-numpy-financial = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.2"
