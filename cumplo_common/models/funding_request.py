@@ -53,7 +53,10 @@ class FundingRequest(BaseModel):
     @cached_property
     def profit_rate(self) -> Decimal:
         """Calculates the profit rate for the funding request"""
-        value = (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
+        if self.installments > 1:
+            value = self.simulation.profit_rate
+        else:
+            value = (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
         return round(Decimal(value), ndigits=4)
 
     @computed_field
