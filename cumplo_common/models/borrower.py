@@ -15,10 +15,22 @@ class BorrowerPortfolio(BaseModel):
     completed: int = Field(...)
     total_amount: int = Field(...)
     total_requests: int = Field(...)
+
+    # NOTE: The following fields are based on the total requests and should add up to 100%
     in_time: Decimal = Field(...)
     cured: Decimal = Field(...)
     delinquent: Decimal = Field(...)
     outstanding: Decimal = Field(...)
+
+    @computed_field
+    @cached_property
+    def paid_in_time(self) -> Decimal | None:
+        """
+        The percentage of paid in time based on the total paid funding requests
+        """
+        if not (self.total_requests and self.completed):
+            return None
+        return min(round(Decimal(self.in_time * self.total_requests / self.completed), 3), Decimal(1))
 
 
 class Borrower(BaseModel):
