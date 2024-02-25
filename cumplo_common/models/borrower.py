@@ -22,8 +22,8 @@ class BorrowerPortfolio(BaseModel):
     delinquent: Decimal = Field(...)
     outstanding: Decimal = Field(...)
 
-    @computed_field
     @cached_property
+    @computed_field
     def paid_in_time(self) -> Decimal | None:
         """
         The percentage of paid in time based on the total paid funding requests
@@ -44,8 +44,8 @@ class Borrower(BaseModel):
     average_days_delinquent: int | None = Field(None)
     portfolio: BorrowerPortfolio = Field(...)
 
-    @computed_field
     @cached_property
+    @computed_field
     def dicom(self) -> bool | None:
         """Returns True if the borrower is in DICOM"""
         return any(string in self.description for string in DICOM_STRINGS) if self.description else None

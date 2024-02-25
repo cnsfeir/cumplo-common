@@ -28,8 +28,8 @@ class Debtor(BaseModel):
     description: str | None = Field(None)
     first_appearance: datetime = Field(...)
 
-    @computed_field
     @cached_property
+    @computed_field
     def dicom(self) -> bool | None:
         """Returns True if the borrower is in DICOM"""
         return any(string in self.description for string in DICOM_STRINGS) if self.description else None
