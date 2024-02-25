@@ -44,7 +44,7 @@ class FundingRequest(BaseModel):
 
     debtors: list[Debtor] = Field(default_factory=list)
     credit_type: CreditType = Field(...)
-    simulation: Simulation = Field(..., exclude=True)
+    simulation: Simulation = Field(...)
     duration: Duration = Field(...)
     borrower: Borrower = Field(...)
     currency: Currency = Field(...)

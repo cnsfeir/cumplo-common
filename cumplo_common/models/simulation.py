@@ -1,8 +1,10 @@
+# mypy: disable-error-code="misc"
+
 from datetime import datetime
 from decimal import Decimal
 from functools import cached_property
 
-from pydantic import Field
+from pydantic import Field, computed_field
 
 from cumplo_common.models.base_model import BaseModel
 from cumplo_common.utils.constants import SIMULATION_AMOUNT
@@ -20,6 +22,7 @@ class Simulation(BaseModel):
     cumplo_points: int = Field(...)
     payment_schedule: list[SimulationInstallment] = Field(default_factory=list)
 
+    @computed_field
     @cached_property
     def investment(self) -> int:
         """Returns the investment of the simulation"""

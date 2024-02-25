@@ -55,13 +55,11 @@ class BaseModel(PydanticBaseModel, ABC):
         else:
             values = [values]
 
-        inner_schema = schema.get("schema", {})
-
-        for field in inner_schema.get("computed_fields", []):
+        for field in schema.get("computed_fields", []):
             for element in values:
                 element.pop(field.get("property_name"), None)
 
-        for name, value in inner_schema.get("fields", {}).items():
+        for name, value in schema.get("fields", {}).items():
             for element in values:
                 cls._remove_computed_fields(value, element.get(name))
 
