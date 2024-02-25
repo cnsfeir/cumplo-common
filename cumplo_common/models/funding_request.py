@@ -1,13 +1,11 @@
 # pylint: disable=no-member
-# mypy: disable-error-code="misc"
+# mypy: disable-error-code="misc, override"
 
 from decimal import Decimal
 from functools import cached_property
 from math import ceil
-from typing import Self
 
-import numpy_financial
-from pydantic import Field, computed_field, model_validator
+from pydantic import Field, computed_field
 
 from cumplo_common.models.base_model import BaseModel, StrEnum
 from cumplo_common.models.borrower import Borrower
@@ -46,20 +44,10 @@ class FundingRequest(BaseModel):
 
     debtors: list[Debtor] = Field(default_factory=list)
     credit_type: CreditType = Field(...)
-    simulation: Simulation = Field(...)
+    simulation: Simulation = Field(..., exclude=True)
     duration: Duration = Field(...)
     borrower: Borrower = Field(...)
     currency: Currency = Field(...)
-
-    @model_validator(mode="after")
-    def _validate_model(self) -> Self:
-        self._calculate_irr()
-        return self
-
-    def _calculate_irr(self) -> None:
-        """Recalculates the IRR if the funding request is paid in installments"""
-        if self.installments > 1:
-            self.irr = round(Decimal(numpy_financial.irr(self.simulation.cash_flows)), 4)
 
     @computed_field
     @cached_property
