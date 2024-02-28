@@ -21,7 +21,9 @@ class FilterConfiguration(BaseModel):
 
     id: ulid.ULID = Field(...)
     name: str | None = Field(None)
-    ignore_dicom: bool = Field(False)
+    ignore_debtor_dicom: bool = Field(False)
+    ignore_borrower_dicom: bool = Field(False)
+
     minimum_score: Decimal | None = Field(None, ge=0, le=1)
     target_credit_types: list[CreditType] | None = Field(None)
 

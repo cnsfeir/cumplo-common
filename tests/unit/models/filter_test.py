@@ -29,10 +29,22 @@ class TestFilterConfiguration:
         Should be equal if the key attributes are the same
         """
         filter_1 = FilterConfiguration.model_validate(
-            {"id": cls.id_1, "ignore_dicom": True, "minimum_irr": "1.1", "minimum_score": 0.5, "minimum_duration": 30}
+            {
+                "id": cls.id_1,
+                "ignore_borrower_dicom": True,
+                "minimum_irr": "1.1",
+                "minimum_score": 0.5,
+                "minimum_duration": 30,
+            }
         )
         filter_2 = FilterConfiguration.model_validate(
-            {"id": cls.id_2, "ignore_dicom": True, "minimum_irr": "1.1", "minimum_score": 0.5, "minimum_duration": 30}
+            {
+                "id": cls.id_2,
+                "ignore_borrower_dicom": True,
+                "minimum_irr": "1.1",
+                "minimum_score": 0.5,
+                "minimum_duration": 30,
+            }
         )
         assert filter_1 == filter_2
 
@@ -42,9 +54,21 @@ class TestFilterConfiguration:
         Should NOT be equal if one of the key attributes are the different
         """
         filter_1 = FilterConfiguration.model_validate(
-            {"id": cls.id_1, "ignore_dicom": True, "minimum_irr": "1.1", "minimum_score": 0.5, "minimum_duration": 30}
+            {
+                "id": cls.id_1,
+                "ignore_borrower_dicom": True,
+                "minimum_irr": "1.1",
+                "minimum_score": 0.5,
+                "minimum_duration": 30,
+            }
         )
         filter_2 = FilterConfiguration.model_validate(
-            {"id": cls.id_2, "ignore_dicom": True, "minimum_irr": "1.1", "minimum_score": 0.5, "minimum_duration": 10}
+            {
+                "id": cls.id_2,
+                "ignore_borrower_dicom": True,
+                "minimum_irr": "1.1",
+                "minimum_score": 0.5,
+                "minimum_duration": 10,
+            }
         )
         assert filter_1 != filter_2

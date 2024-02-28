@@ -7,7 +7,6 @@ from functools import cached_property
 from pydantic import ConfigDict, Field, computed_field
 
 from cumplo_common.models.base_model import BaseModel
-from cumplo_common.utils.constants import DICOM_STRINGS
 
 
 class BorrowerPortfolio(BaseModel):
@@ -43,9 +42,4 @@ class Borrower(BaseModel):
     first_appearance: datetime = Field(...)
     average_days_delinquent: int | None = Field(None)
     portfolio: BorrowerPortfolio = Field(...)
-
-    @computed_field
-    @cached_property
-    def dicom(self) -> bool | None:
-        """Returns True if the borrower is in DICOM"""
-        return any(string in self.description for string in DICOM_STRINGS) if self.description else None
+    dicom: bool | None = Field(None)
