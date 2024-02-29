@@ -20,6 +20,7 @@ class WebhookConfiguration(ChannelConfiguration):
 
 class IFTTTConfiguration(ChannelConfiguration):
     key: str = Field(...)
+    event: str = Field(...)
     type_: ChannelType = ChannelType.IFTTT
 
 
