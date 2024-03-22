@@ -37,7 +37,7 @@ class Borrower(BaseModel):
 
     id: int | None = Field(None)
     name: str | None = Field(None)
-    sector: str | None = Field(None)
+    economic_sector: str | None = Field(None)
     description: str | None = Field(None)
     first_appearance: datetime = Field(...)
     average_days_delinquent: int | None = Field(None)
