@@ -10,7 +10,20 @@ from pydantic import Field, PositiveInt, field_validator
 
 from cumplo_common.models.base_model import BaseModel
 from cumplo_common.models.credit import CreditType
-from cumplo_common.models.pydantic import ValidatorMode
+
+
+class DebtorFilterConfiguration(BaseModel):
+    ignore_dicom: bool = Field(False)
+    minimum_requested_credits: PositiveInt | None = Field(None)
+    minimum_paid_in_time_percentage: Decimal | None = Field(None, ge=0, le=1)
+
+
+class BorrowerFilterConfiguration(BaseModel):
+    ignore_dicom: bool = Field(False)
+    minimum_requested_amount: PositiveInt | None = Field(None)
+    minimum_requested_credits: PositiveInt | None = Field(None)
+    maximum_average_days_delinquent: PositiveInt | None = Field(None)
+    minimum_paid_in_time_percentage: Decimal | None = Field(None, ge=0, le=1)
 
 
 class FilterConfiguration(BaseModel):
@@ -21,9 +34,6 @@ class FilterConfiguration(BaseModel):
 
     id: ulid.ULID = Field(...)
     name: str | None = Field(None)
-    ignore_debtor_dicom: bool = Field(False)
-    ignore_borrower_dicom: bool = Field(False)
-
     minimum_score: Decimal | None = Field(None, ge=0, le=1)
     target_credit_types: list[CreditType] | None = Field(None)
 
@@ -34,13 +44,10 @@ class FilterConfiguration(BaseModel):
     minimum_irr: Decimal | None = Field(None, ge=0)
     minimum_monthly_profit_rate: Decimal | None = Field(None, ge=0)
 
-    minimum_requested_amount: PositiveInt | None = Field(None)
-    minimum_requested_credits: PositiveInt | None = Field(None)
+    debtor: DebtorFilterConfiguration | None = Field(None)
+    borrower: BorrowerFilterConfiguration | None = Field(None)
 
-    maximum_average_days_delinquent: PositiveInt | None = Field(None)
-    minimum_paid_in_time_percentage: Decimal | None = Field(None, ge=0, le=1)
-
-    @field_validator("id", mode=ValidatorMode.BEFORE)
+    @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: ulid.default.api.ULIDPrimitive) -> ulid.ULID:
         """Formats the ID field as an ULID object"""

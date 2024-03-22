@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from decimal import Decimal
+from functools import cached_property
 
 from pydantic import Field
 
@@ -15,6 +16,15 @@ class DebtPortfolio(BaseModel):
     in_time: int = Field(...)
     total_amount: int = Field(...)
     total_requests: int = Field(...)
+
+    @cached_property
+    def paid_in_time(self) -> Decimal | None:
+        """
+        The percentage of paid in time based on the total paid funding requests
+        """
+        if not (self.total_requests and self.completed):
+            return None
+        return min(round(Decimal(self.in_time / self.completed), 3), Decimal(1))
 
 
 class Debtor(BaseModel):
