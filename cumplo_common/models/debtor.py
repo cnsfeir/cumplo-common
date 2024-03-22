@@ -14,7 +14,6 @@ class DebtPortfolio(BaseModel):
     delinquent: int = Field(...)
     completed: int = Field(...)
     in_time: int = Field(...)
-    total_amount: int = Field(...)
     total_requests: int = Field(...)
 
     @cached_property
@@ -28,7 +27,6 @@ class DebtPortfolio(BaseModel):
 
 
 class Debtor(BaseModel):
-    amount: int = Field(...)
     share: Decimal = Field(...)
     name: str | None = Field(None)
     sector: str | None = Field(None)
