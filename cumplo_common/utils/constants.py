@@ -23,3 +23,6 @@ SIMULATION_AMOUNT = int(os.getenv("SIMULATION_AMOUNT", "1000000"))
 
 # Defaults
 DEFAULT_EXPIRATION_MINUTES: int = int(os.getenv("DEFAULT_EXPIRATION_MINUTES", "60"))
+
+# Validators
+PHONE_NUMBER_REGEX = r"^\+[1-9]\d{1,14}$"
