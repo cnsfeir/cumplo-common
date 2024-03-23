@@ -3,10 +3,11 @@ from urllib.parse import urlparse
 
 from pydantic import Field, field_validator
 
-from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelMetadata, ChannelType
+from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelType
 
 
-class WebhookMetadata(ChannelMetadata):
+class WebhookConfiguration(ChannelConfiguration):
+    type_: ChannelType = ChannelType.WEBHOOK
     url: str = Field(..., max_length=2000)
 
     @field_validator("url", mode="before")
@@ -29,8 +30,3 @@ class WebhookMetadata(ChannelMetadata):
             pass
 
         return value
-
-
-class WebhookConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.WEBHOOK
-    metadata: WebhookMetadata

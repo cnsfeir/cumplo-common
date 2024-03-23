@@ -2,11 +2,12 @@ import re
 
 from pydantic import Field, field_validator
 
-from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelMetadata, ChannelType
+from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelType
 from cumplo_common.utils.constants import PHONE_NUMBER_REGEX
 
 
-class WhatsappMetadata(ChannelMetadata):
+class WhatsappConfiguration(ChannelConfiguration):
+    type_: ChannelType = ChannelType.WHATSAPP
     phone_number: str = Field(...)
 
     @field_validator("phone_number", mode="before")
@@ -18,8 +19,3 @@ class WhatsappMetadata(ChannelMetadata):
         if not re.match(PHONE_NUMBER_REGEX, value):
             raise ValueError("Invalid phone number format")
         return value
-
-
-class WhatsappConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.WHATSAPP
-    metadata: WhatsappMetadata

@@ -13,10 +13,6 @@ class ChannelType(StrEnum):
     IFTTT = "IFTTT"
 
 
-class ChannelMetadata(BaseModel, ABC):
-    """Base class for channel metadata"""
-
-
 class ChannelConfiguration(BaseModel, ABC):
     """Base class for channel configuration"""
 
@@ -24,7 +20,6 @@ class ChannelConfiguration(BaseModel, ABC):
     enabled: bool = Field(True)
     type_: ChannelType = Field(...)
     events: list[Template] = Field(default_factory=list)
-    metadata: ChannelMetadata
 
     @field_validator("id", mode="before")
     @classmethod

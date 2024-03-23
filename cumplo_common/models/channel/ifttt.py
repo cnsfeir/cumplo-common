@@ -1,9 +1,10 @@
 from pydantic import Field, field_validator
 
-from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelMetadata, ChannelType
+from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelType
 
 
-class IFTTTMetadata(ChannelMetadata):
+class IFTTTConfiguration(ChannelConfiguration):
+    type_: ChannelType = ChannelType.IFTTT
     key: str = Field(...)
     event: str = Field(...)
 
@@ -26,8 +27,3 @@ class IFTTTMetadata(ChannelMetadata):
         if not value.replace("-", "").replace("_", "").isalnum():
             raise ValueError("Event name must be alphanumeric")
         return value
-
-
-class IFTTTConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.IFTTT
-    metadata: IFTTTMetadata
