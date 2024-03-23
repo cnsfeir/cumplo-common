@@ -28,6 +28,7 @@ class Simulation(BaseModel):
         """Returns the investment of the simulation"""
         return SIMULATION_AMOUNT + self.cumplo_points
 
+    @computed_field
     @cached_property
     def cash_flows(self) -> list[int]:
         """

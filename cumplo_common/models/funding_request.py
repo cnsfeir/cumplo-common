@@ -39,7 +39,7 @@ class FundingRequest(BaseModel):
     raised_amount: int = Field(...)
     maximum_investment: int = Field(...)
     investors: int = Field(...)
-    funded_percentage: Decimal = Field(...)
+    raised_percentage: Decimal = Field(...)
     supporting_documents: list[str] = Field(default_factory=list)
 
     debtors: list[Debtor] = Field(default_factory=list)
@@ -70,7 +70,7 @@ class FundingRequest(BaseModel):
     @cached_property
     def is_completed(self) -> bool:
         """Checks if the funding request is fully funded"""
-        return self.funded_percentage == Decimal(1)
+        return self.raised_percentage == Decimal(1)
 
     @computed_field
     @cached_property

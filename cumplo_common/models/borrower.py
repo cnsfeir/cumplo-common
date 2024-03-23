@@ -4,7 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from functools import cached_property
 
-from pydantic import ConfigDict, Field, computed_field
+from pydantic import Field
 
 from cumplo_common.models.base_model import BaseModel
 
@@ -21,7 +21,6 @@ class BorrowerPortfolio(BaseModel):
     delinquent: Decimal = Field(...)
     outstanding: Decimal = Field(...)
 
-    @computed_field
     @cached_property
     def paid_in_time(self) -> Decimal | None:
         """
@@ -33,11 +32,9 @@ class BorrowerPortfolio(BaseModel):
 
 
 class Borrower(BaseModel):
-    model_config = ConfigDict(str_to_upper=True)
-
     id: int | None = Field(None)
     name: str | None = Field(None)
-    sector: str | None = Field(None)
+    economic_sector: str | None = Field(None)
     description: str | None = Field(None)
     first_appearance: datetime = Field(...)
     average_days_delinquent: int | None = Field(None)
