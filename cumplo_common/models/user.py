@@ -8,7 +8,7 @@ import ulid
 from pydantic import Field, PositiveInt, field_validator
 
 from cumplo_common.models.base_model import BaseModel
-from cumplo_common.models.channel import ChannelConfiguration, ChannelType
+from cumplo_common.models.channel import ChannelConfiguration
 from cumplo_common.models.credentials import Credentials
 from cumplo_common.models.filter_configuration import FilterConfiguration
 from cumplo_common.models.notification import Notification
@@ -26,7 +26,7 @@ class User(BaseModel):
 
     notifications_query: Callable[[str], dict[str, Notification]] = Field(..., exclude=True)
     filters_query: Callable[[str], dict[str, FilterConfiguration]] = Field(..., exclude=True)
-    channels_query: Callable[[str], dict[ChannelType, ChannelConfiguration]] = Field(..., exclude=True)
+    channels_query: Callable[[str], dict[str, ChannelConfiguration]] = Field(..., exclude=True)
 
     @field_validator("id", mode=ValidatorMode.BEFORE)
     @classmethod
@@ -55,11 +55,11 @@ class User(BaseModel):
         return self.notifications_query(str(self.id))  # pylint: disable=not-callable
 
     @cached_property
-    def channels(self) -> dict[ChannelType, ChannelConfiguration]:
+    def channels(self) -> dict[str, ChannelConfiguration]:
         """
         Returns the user channels
 
         Returns:
-            dict[ChannelType, ChannelConfiguration]: A dictionary of channels
+            dict[str, ChannelConfiguration]: A dictionary of channels
         """
         return self.channels_query(str(self.id))  # pylint: disable=not-callable

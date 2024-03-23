@@ -23,7 +23,7 @@ class BaseModel(PydanticBaseModel, ABC):
     )
 
     def __hash__(self) -> int:
-        return hash(self.model_dump_json(exclude_none=True))
+        return hash(self.model_dump_json(exclude={"id"}, exclude_none=True))
 
     def __str__(self) -> str:
         return self.model_dump_json(exclude_none=True)

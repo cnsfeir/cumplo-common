@@ -1,6 +1,7 @@
 from abc import ABC
 
-from pydantic import Field
+import ulid
+from pydantic import Field, field_validator
 
 from cumplo_common.models.base_model import BaseModel, StrEnum
 from cumplo_common.models.template import Event
@@ -19,7 +20,14 @@ class ChannelMetadata(BaseModel, ABC):
 class ChannelConfiguration(BaseModel, ABC):
     """Base class for channel configuration"""
 
-    type_: ChannelType = Field(...)
+    id: ulid.ULID = Field(...)
     enabled: bool = Field(True)
+    type_: ChannelType = Field(...)
     events: list[Event] = Field(default_factory=list)
     metadata: ChannelMetadata
+
+    @field_validator("id", mode="before")
+    @classmethod
+    def _format_id(cls, value: ulid.default.api.ULIDPrimitive) -> ulid.ULID:
+        """Formats the ID field as an ULID object"""
+        return ulid.parse(value)
