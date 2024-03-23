@@ -25,10 +25,11 @@ class WebhookConfiguration(ChannelConfiguration):
             raise ValueError("URL must have a hostname")
 
         try:
-            if ipaddress.ip_address(url.hostname).is_private:
-                raise ValueError("Private IP addresses are not allowed")
+            ip = ipaddress.ip_address(url.hostname)
         except ValueError:
-            # NOTE: Hostname is not an IP address, which is fine
-            pass
+            pass  # NOTE: Hostname is not an IP address, which is fine
+        else:
+            if ip.is_private:
+                raise ValueError("Private IP addresses are not allowed")
 
         return value
