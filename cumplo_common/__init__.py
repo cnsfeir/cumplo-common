@@ -2,4 +2,4 @@
 A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project
 """
 
-__version__ = "1.0.4"
+__version__ = "1.1.0"
