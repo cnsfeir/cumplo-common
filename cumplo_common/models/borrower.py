@@ -32,8 +32,6 @@ class BorrowerPortfolio(BaseModel):
 
 
 class Borrower(BaseModel):
-    # model_config = ConfigDict(str_to_upper=True)
-
     id: int | None = Field(None)
     name: str | None = Field(None)
     economic_sector: str | None = Field(None)
