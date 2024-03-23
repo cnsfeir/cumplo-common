@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from cumplo_common.database.firestore.subcollections import UserSubcollection
-from cumplo_common.models.channel import CHANNEL_CONFIGURATION_BY_TYPE, ChannelConfiguration, ChannelType
+from cumplo_common.models.channel import CHANNEL_CONFIGURATION_BY_TYPE, ChannelConfiguration
 from cumplo_common.utils.constants import CHANNELS_COLLECTION
 
 logger = getLogger(__name__)
