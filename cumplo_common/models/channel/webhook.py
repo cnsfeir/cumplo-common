@@ -16,7 +16,9 @@ class WebhookConfiguration(ChannelConfiguration):
         """
         Validates the URL scheme and hostname
         """
-        if (url := urlparse(value)) != "https":
+        url = urlparse(value)
+
+        if url.scheme != "https":
             raise ValueError("Only HTTPS URLs are allowed")
 
         if not url.hostname:
