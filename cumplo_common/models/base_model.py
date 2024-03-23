@@ -18,7 +18,6 @@ class BaseModel(PydanticBaseModel, ABC):
         json_encoders={ULID: str},
         validate_assignment=True,
         validate_default=True,
-        str_to_upper=True,
         extra="forbid",
         frozen=True,
     )
