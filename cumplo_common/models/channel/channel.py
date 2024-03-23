@@ -4,7 +4,7 @@ import ulid
 from pydantic import Field, field_validator
 
 from cumplo_common.models.base_model import BaseModel, StrEnum
-from cumplo_common.models.template import Event
+from cumplo_common.models.template import Template
 
 
 class ChannelType(StrEnum):
@@ -23,7 +23,7 @@ class ChannelConfiguration(BaseModel, ABC):
     id: ulid.ULID = Field(...)
     enabled: bool = Field(True)
     type_: ChannelType = Field(...)
-    events: list[Event] = Field(default_factory=list)
+    events: list[Template] = Field(default_factory=list)
     metadata: ChannelMetadata
 
     @field_validator("id", mode="before")
