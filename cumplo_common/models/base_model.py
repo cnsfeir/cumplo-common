@@ -18,13 +18,12 @@ class BaseModel(PydanticBaseModel, ABC):
         json_encoders={ULID: str},
         validate_assignment=True,
         validate_default=True,
-        str_to_upper=True,
         extra="forbid",
         frozen=True,
     )
 
     def __hash__(self) -> int:
-        return hash(self.model_dump_json(exclude_none=True))
+        return hash(self.model_dump_json(exclude={"id"}, exclude_none=True))
 
     def __str__(self) -> str:
         return self.model_dump_json(exclude_none=True)
