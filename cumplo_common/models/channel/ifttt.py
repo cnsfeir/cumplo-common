@@ -1,10 +1,12 @@
+from typing import Literal
+
 from pydantic import Field, field_validator
 
 from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelType
 
 
 class IFTTTConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.IFTTT
+    type_: Literal[ChannelType.IFTTT] = ChannelType.IFTTT
     key: str = Field(...)
     event: str = Field(...)
 

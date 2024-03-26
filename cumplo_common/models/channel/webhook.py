@@ -1,4 +1,5 @@
 import ipaddress
+from typing import Literal
 from urllib.parse import urlparse
 
 from pydantic import Field, field_validator
@@ -7,7 +8,7 @@ from cumplo_common.models.channel.channel import ChannelConfiguration, ChannelTy
 
 
 class WebhookConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.WEBHOOK
+    type_: Literal[ChannelType.WEBHOOK] = ChannelType.WEBHOOK
     url: str = Field(..., max_length=2000)
 
     @field_validator("url", mode="before")

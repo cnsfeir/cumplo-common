@@ -1,4 +1,5 @@
 import re
+from typing import Literal
 
 from pydantic import Field, field_validator
 
@@ -7,7 +8,7 @@ from cumplo_common.utils.constants import PHONE_NUMBER_REGEX
 
 
 class WhatsappConfiguration(ChannelConfiguration):
-    type_: ChannelType = ChannelType.WHATSAPP
+    type_: Literal[ChannelType.WHATSAPP] = ChannelType.WHATSAPP
     phone_number: str = Field(...)
 
     @field_validator("phone_number", mode="before")
