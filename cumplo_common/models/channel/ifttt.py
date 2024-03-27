@@ -16,7 +16,7 @@ class IFTTTConfiguration(ChannelConfiguration):
         """
         Validates that the IFTTT webhook key is alphanumeric
         """
-        if not value.isalnum():
+        if not value.replace("-", "").replace("_", "").isalnum():
             raise ValueError("Webhook key must be alphanumeric")
         return value
 
