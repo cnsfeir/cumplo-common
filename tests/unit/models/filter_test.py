@@ -31,19 +31,19 @@ class TestFilterConfiguration:
         filter_1 = FilterConfiguration.model_validate(
             {
                 "id": cls.id_1,
-                "ignore_borrower_dicom": True,
                 "minimum_irr": "1.1",
                 "minimum_score": 0.5,
                 "minimum_duration": 30,
+                "borrower": {"ignore_dicom": True},
             }
         )
         filter_2 = FilterConfiguration.model_validate(
             {
                 "id": cls.id_2,
-                "ignore_borrower_dicom": True,
                 "minimum_irr": "1.1",
                 "minimum_score": 0.5,
                 "minimum_duration": 30,
+                "borrower": {"ignore_dicom": True},
             }
         )
         assert filter_1 == filter_2
@@ -56,19 +56,19 @@ class TestFilterConfiguration:
         filter_1 = FilterConfiguration.model_validate(
             {
                 "id": cls.id_1,
-                "ignore_borrower_dicom": True,
                 "minimum_irr": "1.1",
                 "minimum_score": 0.5,
                 "minimum_duration": 30,
+                "borrower": {"ignore_dicom": True},
             }
         )
         filter_2 = FilterConfiguration.model_validate(
             {
                 "id": cls.id_2,
-                "ignore_borrower_dicom": True,
                 "minimum_irr": "1.1",
                 "minimum_score": 0.5,
                 "minimum_duration": 10,
+                "borrower": {"ignore_dicom": True},
             }
         )
         assert filter_1 != filter_2
