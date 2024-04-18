@@ -1,3 +1,5 @@
+# pylint: disable=no-member, no-value-for-parameter
+
 import json
 from base64 import b64decode
 from collections.abc import Awaitable, Callable
@@ -6,6 +8,8 @@ from logging import getLogger
 from fastapi import Request, Response
 from pydantic import BaseModel, Field
 from starlette.middleware.base import BaseHTTPMiddleware
+
+from cumplo_common.models.event import Event
 
 logger = getLogger(__name__)
 
@@ -28,7 +32,12 @@ class PubSubEvent(BaseModel):
     @property
     def id_user(self) -> str | None:
         """Returns the ID of the user who triggered the event"""
-        return self.message.attributes.get("id_user")  # pylint: disable=no-member
+        return self.message.attributes.get("id_user")
+
+    @property
+    def event(self) -> Event:
+        """Returns the type of the event"""
+        return Event(self.subscription.split("/").pop())  # type: ignore[call-arg]
 
 
 class PubSubMiddleware(BaseHTTPMiddleware):
