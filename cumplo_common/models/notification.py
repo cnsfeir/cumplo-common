@@ -8,8 +8,7 @@ import arrow
 from pydantic import Field, model_validator
 
 from cumplo_common.models.base_model import BaseModel
-from cumplo_common.models.pydantic import ValidatorMode
-from cumplo_common.models.template import Template
+from cumplo_common.models.event import Event
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 
 
@@ -17,10 +16,10 @@ class Notification(BaseModel):
     id: str = Field(...)
     date: datetime = Field(...)
     content_id: int = Field(...)
-    template: Template = Field(...)
+    event: Event = Field(...)
     expiration_minutes: int = Field(DEFAULT_EXPIRATION_MINUTES)
 
-    @model_validator(mode=ValidatorMode.BEFORE)
+    @model_validator(mode="before")
     @classmethod
     def format_data(cls, values: dict) -> dict:
         """Formats the data before validation"""
@@ -30,15 +29,15 @@ class Notification(BaseModel):
     @staticmethod
     def _process_id(values: dict) -> dict:
         """
-        Separates the actual ID and the template from the ID field
+        Separates the actual ID and the event from the ID field
         """
         if not (id_ := values.get("id")):
             return values
 
-        if not fullmatch(r"^[a-zA-Z]+_\d+$", id_):
+        if not fullmatch(r"^[a-zA-Z_]+\.[a-zA-Z_]+-\d+$", id_):
             raise ValueError("Invalid ID format")
 
-        values["template"], values["content_id"] = id_.split("_")
+        values["event"], values["content_id"] = id_.split("-")
         return values
 
     @property
@@ -55,15 +54,15 @@ class Notification(BaseModel):
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) > arrow.utcnow()
 
     @staticmethod
-    def build_id(template: Template, content_id: int) -> str:
+    def build_id(event: Event, content_id: int) -> str:
         """
         Builds the ID for a notification
 
         Args:
-            template (Template): Notification template
+            event (Event): Notification event
             content_id (int): Notification content ID
 
         Returns:
             str: Notification ID
         """
-        return f"{template.value}_{content_id}"
+        return f"{event.value}-{content_id}"
