@@ -26,7 +26,7 @@ class WebhookConfiguration(ChannelConfiguration):
             raise ValueError("URL must have a hostname")
 
         try:
-            ip = ipaddress.ip_address(url.hostname)
+            ip = ipaddress.ip_address(url.hostname)  # pylint: disable=invalid-name
         except ValueError:
             pass  # NOTE: Hostname is not an IP address, which is fine
         else:
