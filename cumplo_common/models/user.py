@@ -12,7 +12,6 @@ from cumplo_common.models.channel import ChannelConfiguration
 from cumplo_common.models.credentials import Credentials
 from cumplo_common.models.filter_configuration import FilterConfiguration
 from cumplo_common.models.notification import Notification
-from cumplo_common.models.pydantic import ValidatorMode
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 
 
@@ -28,7 +27,7 @@ class User(BaseModel):
     filters_query: Callable[[str], dict[str, FilterConfiguration]] = Field(..., exclude=True)
     channels_query: Callable[[str], dict[str, ChannelConfiguration]] = Field(..., exclude=True)
 
-    @field_validator("id", mode=ValidatorMode.BEFORE)
+    @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
         """Formats the ID field as an ULID object"""
