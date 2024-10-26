@@ -31,35 +31,38 @@ class User(BaseModel):
     @field_validator("id", mode=ValidatorMode.BEFORE)
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
-        """Formats the ID field as an ULID object"""
+        """Format the ID field as an ULID object."""
         return ulid.parse(value)
 
     @cached_property
     def filters(self) -> dict[str, FilterConfiguration]:
         """
-        Returns the user filters
+        Returns the user filters.
 
         Returns:
             dict[str, FilterConfiguration]: A dictionary of filters
+
         """
         return self.filters_query(str(self.id))  # pylint: disable=not-callable
 
     @cached_property
     def notifications(self) -> dict[str, Notification]:
         """
-        Returns the user notifications
+        Returns the user notifications.
 
         Returns:
             dict[str, Notification]: A dictionary of notifications
+
         """
         return self.notifications_query(str(self.id))  # pylint: disable=not-callable
 
     @cached_property
     def channels(self) -> dict[str, ChannelConfiguration]:
         """
-        Returns the user channels
+        Returns the user channels.
 
         Returns:
             dict[str, ChannelConfiguration]: A dictionary of channels
+
         """
         return self.channels_query(str(self.id))  # pylint: disable=not-callable

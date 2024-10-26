@@ -1,5 +1,4 @@
 # mypy: disable-error-code="call-overload"
-# pylint: disable=no-member
 
 from datetime import datetime
 from re import fullmatch
@@ -23,15 +22,12 @@ class Notification(BaseModel):
     @model_validator(mode=ValidatorMode.BEFORE)
     @classmethod
     def format_data(cls, values: dict) -> dict:
-        """Formats the data before validation"""
-        values = cls._process_id(values)
-        return values
+        """Format the data before validation."""
+        return cls._process_id(values)
 
     @staticmethod
     def _process_id(values: dict) -> dict:
-        """
-        Separates the actual ID and the template from the ID field
-        """
+        """Separate the actual ID and the template from the ID field."""
         if not (id_ := values.get("id")):
             return values
 
@@ -44,20 +40,21 @@ class Notification(BaseModel):
     @property
     def has_expired(self) -> bool:
         """
-        Checks if the notification has expired
+        Check if the notification has expired.
 
         Args:
             expiration_minutes (int): Minutes until the notification expires
 
         Returns:
             bool: Whether the notification has expired or not
+
         """
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) > arrow.utcnow()
 
     @staticmethod
     def build_id(template: Template, content_id: int) -> str:
         """
-        Builds the ID for a notification
+        Build the ID for a notification.
 
         Args:
             template (Template): Notification template
@@ -65,5 +62,6 @@ class Notification(BaseModel):
 
         Returns:
             str: Notification ID
+
         """
         return f"{template.value}_{content_id}"

@@ -14,7 +14,7 @@ class ChannelType(StrEnum):
 
 
 class ChannelConfiguration(BaseModel, ABC):
-    """Base class for channel configuration"""
+    """Base class for channel configuration."""
 
     id: ulid.ULID = Field(...)
     enabled: bool = Field(True)
@@ -24,5 +24,5 @@ class ChannelConfiguration(BaseModel, ABC):
     @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: ulid.default.api.ULIDPrimitive) -> ulid.ULID:
-        """Formats the ID field as an ULID object"""
+        """Format the ID field as an ULID object."""
         return ulid.parse(value)

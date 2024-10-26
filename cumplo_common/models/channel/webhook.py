@@ -14,9 +14,7 @@ class WebhookConfiguration(ChannelConfiguration):
     @field_validator("url", mode="before")
     @classmethod
     def _validate_url(cls, value: str) -> str:
-        """
-        Validates the URL scheme and hostname
-        """
+        """Validate the URL scheme and hostname."""
         url = urlparse(value)
 
         if url.scheme != "https":

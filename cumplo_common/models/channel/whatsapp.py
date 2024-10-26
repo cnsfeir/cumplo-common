@@ -14,9 +14,7 @@ class WhatsappConfiguration(ChannelConfiguration):
     @field_validator("phone_number", mode="before")
     @classmethod
     def _validate_phone_number(cls, value: str) -> str:
-        """
-        Validates the phone number conforms to the E.164 format
-        """
+        """Validate the phone number conforms to the E.164 format."""
         if not re.match(PHONE_NUMBER_REGEX, value):
             raise ValueError("Invalid phone number format")
         return value

@@ -5,7 +5,7 @@ from cumplo_common.models.currency import Currency
 
 def format_currency(amount: int, currency: Currency = Currency.CLP) -> str:
     """
-    Formats an amount of money in CLP
+    Format an amount of money in CLP.
 
     Args:
         amount (int): The amount of money to be formatted
@@ -13,5 +13,6 @@ def format_currency(amount: int, currency: Currency = Currency.CLP) -> str:
 
     Returns:
         str: The formatted amount of money
+
     """
     return babel.numbers.format_currency(amount, currency=currency, locale="es_CL")

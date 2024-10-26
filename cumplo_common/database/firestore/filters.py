@@ -12,7 +12,7 @@ class FilterCollection(UserSubcollection):
 
     def get(self, id_user: str, id_document: str) -> FilterConfiguration:
         """
-        Gets a specific Filter of a given user
+        Get a specific Filter of a given user.
 
         Args:
             id_user (str): The user ID which owns the filter
@@ -23,6 +23,7 @@ class FilterCollection(UserSubcollection):
 
         Returns:
             FilterConfiguration: The filter configuration data
+
         """
         logger.info(f"Getting user {id_user} configurations from Firestore")
         document = self._collection(id_user).document(id_document).get()
@@ -33,13 +34,14 @@ class FilterCollection(UserSubcollection):
 
     def get_all(self, id_user: str) -> dict[str, FilterConfiguration]:
         """
-        Gets the user configurations data
+        Get the user configurations data.
 
         Args:
             id_user (str): The user ID which owns the filters
 
         Returns:
             dict[int, FilterConfiguration]: A dictionary containing the user configurations
+
         """
         logger.info(f"Getting user {id_user} configurations from Firestore")
         stream = self._collection(id_user).stream()
@@ -51,11 +53,12 @@ class FilterCollection(UserSubcollection):
 
     def put(self, id_user: str, data: FilterConfiguration) -> None:
         """
-        Creates or updates a configuration of a given user
+        Create or updates a configuration of a given user.
 
         Args:
             id_user (str): The user ID which owns the configuration
             data (FilterConfiguration): The filter configuration to be upserted
+
         """
         logger.info(f"Upserting configuration {data.id} of user {id_user} into Firestore")
         document = self._collection(id_user).document(str(data.id))
@@ -63,11 +66,12 @@ class FilterCollection(UserSubcollection):
 
     def delete(self, id_user: str, id_document: str) -> None:
         """
-        Deletes a configuration for a given user and configuration ID
+        Delete a configuration for a given user and configuration ID.
 
         Args:
             id_user (str): The user ID which owns the configuration
             id_document (int): The filter ID to be deleted
+
         """
         logger.info(f"Deleting filter {id_document} from Firestore")
         document = self._collection(id_user).document(id_document)

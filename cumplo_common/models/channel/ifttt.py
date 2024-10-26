@@ -13,9 +13,7 @@ class IFTTTConfiguration(ChannelConfiguration):
     @field_validator("key", mode="before")
     @classmethod
     def _validate_key(cls, value: str) -> str:
-        """
-        Validates that the IFTTT webhook key is alphanumeric
-        """
+        """Validate that the IFTTT webhook key is alphanumeric."""
         if not value.replace("-", "").replace("_", "").isalnum():
             raise ValueError("Webhook key must be alphanumeric")
         return value
@@ -23,9 +21,7 @@ class IFTTTConfiguration(ChannelConfiguration):
     @field_validator("event", mode="before")
     @classmethod
     def _validate_event(cls, value: str) -> str:
-        """
-        Validates that the IFTTT event name is alphanumeric
-        """
+        """Validate that the IFTTT event name is alphanumeric."""
         if not value.replace("-", "").replace("_", "").isalnum():
             raise ValueError("Event name must be alphanumeric")
         return value

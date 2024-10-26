@@ -52,7 +52,7 @@ class FundingRequest(BaseModel):
     @computed_field
     @cached_property
     def profit_rate(self) -> Decimal:
-        """Calculates the profit rate for the funding request"""
+        """Calculates the profit rate for the funding request."""
         if self.installments > 1:
             value = self.simulation.profit_rate
         else:
@@ -62,30 +62,31 @@ class FundingRequest(BaseModel):
     @computed_field
     @cached_property
     def monthly_profit_rate(self) -> Decimal:
-        """Calculates the monthly profit rate for the funding request"""
+        """Calculates the monthly profit rate for the funding request."""
         value = (1 + self.irr / 100) ** Decimal(1 / 12) - 1
         return round(Decimal(value), ndigits=4)
 
     @computed_field
     @cached_property
     def is_completed(self) -> bool:
-        """Checks if the funding request is fully funded"""
+        """Checks if the funding request is fully funded."""
         return self.raised_percentage == Decimal(1)
 
     @computed_field
     @cached_property
     def url(self) -> str:
-        """Builds the URL for the funding request"""
+        """Builds the URL for the funding request."""
         return f"{CUMPLO_BASE_URL}/{self.id}"
 
     def monthly_profit(self, amount: int) -> int:
         """
-        Calculates the monthly profit for a given amount
+        Calculate the monthly profit for a given amount.
 
         Args:
             amount (int): The amount to calculate the profit for
 
         Returns:
             int: The monthly profit for the given amount
+
         """
         return ceil(self.monthly_profit_rate * amount)

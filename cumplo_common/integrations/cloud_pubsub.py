@@ -16,6 +16,7 @@ def publish_event(content: dict | list, topic: str, **attributes: str) -> str:
 
     Returns:
         str: The ID of the published event
+
     """
     publisher = PublisherClient()
     topic = f"projects/{PROJECT_ID}/topics/{topic}"

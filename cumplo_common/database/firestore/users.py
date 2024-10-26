@@ -21,10 +21,11 @@ class UserCollection:
 
     def get(self, id_user: str | None = None, api_key: str | None = None) -> User:
         """
-        Gets a user document
+        Get a user document.
 
         Args:
             id_user (str): The user ID
+            api_key (str): The API key
 
         Raises:
             KeyError: When the user does not exist
@@ -32,6 +33,7 @@ class UserCollection:
 
         Returns:
             User: The user object containing the user data
+
         """
         if not (id_user or api_key):
             raise ValueError("Either ID or API key must be provided")
@@ -63,10 +65,11 @@ class UserCollection:
 
     def get_all(self) -> Generator[User, None, None]:
         """
-        Gets all the users data
+        Get all the users data.
 
         Yields:
             Generator[User, None, None]: Iterable of User objects
+
         """
         logger.info("Getting all users from Firestore")
         for user in self.collection.stream():
@@ -81,10 +84,11 @@ class UserCollection:
 
     def put(self, user: User) -> None:
         """
-        Creates or updates a user document
+        Create or updates a user document.
 
         Args:
             user (User): The new user data to be upserted
+
         """
         logger.info(f"Upserting user {user.id} into Firestore")
         document = self.collection.document(str(user.id))
@@ -92,10 +96,11 @@ class UserCollection:
 
     def delete(self, id_user: str) -> None:
         """
-        Deletes a user document
+        Delete a user document.
 
         Args:
             id_user (str): The user ID to be deleted
+
         """
         logger.info(f"Deleting user {id_user} from Firestore")
         document = self.collection.document(id_user)

@@ -14,7 +14,7 @@ class NotificationCollection(UserSubcollection):
 
     def get(self, id_user: str, id_document: str) -> Notification:
         """
-        Gets a specific Notification of a given user
+        Get a specific Notification of a given user.
 
         Args:
             id_user (str): The user ID which owns the notification
@@ -25,6 +25,7 @@ class NotificationCollection(UserSubcollection):
 
         Returns:
             Notification: The notification data
+
         """
         logger.info(f"Getting user {id_user} notifications from Firestore")
         user = self.user.get(id_user)
@@ -36,13 +37,14 @@ class NotificationCollection(UserSubcollection):
 
     def get_all(self, id_user: str) -> dict[str, Notification]:
         """
-        Gets the user notifications data
+        Get the user notifications data.
 
         Args:
             id_user (str): The user ID which owns the notifications
 
         Returns:
             dict[int, Notification]: A dictionary containing the user notifications
+
         """
         logger.info(f"Getting user {id_user} notifications from Firestore")
         stream = self._collection(id_user).stream()
@@ -55,11 +57,12 @@ class NotificationCollection(UserSubcollection):
 
     def put(self, id_user: str, data: str) -> None:
         """
-        Creates or updates a notification of a given user
+        Create or update a notification of a given user.
 
         Args:
             id_user (str): The user ID which owns the notification
             data (str): The ID of the notification to be upserted
+
         """
         logger.info(f"Upserting notification {data} of user {id_user} into Firestore")
         document = self._collection(id_user).document(data)
@@ -67,11 +70,12 @@ class NotificationCollection(UserSubcollection):
 
     def delete(self, id_user: str, id_document: str) -> None:
         """
-        Deletes a notification for a given user and notification ID
+        Delete a notification for a given user and notification ID.
 
         Args:
             id_user (str): The user ID which owns the notification
             id_document (int): The notification ID to be deleted
+
         """
         logger.info(f"Deleting notification {id_document} from Firestore")
         document = self._collection(id_user).document(id_document)

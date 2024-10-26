@@ -1,5 +1,9 @@
+from typing import TYPE_CHECKING
+
 from firebase_admin import credentials, firestore, initialize_app
-from google.cloud.firestore_v1 import Client as FirestoreClient
+
+if TYPE_CHECKING:
+    from google.cloud.firestore_v1 import Client as FirestoreClient
 
 from cumplo_common.database.firestore.channels import ChannelCollection
 from cumplo_common.database.firestore.filters import FilterCollection
@@ -12,10 +16,10 @@ class Client:
     def __init__(self) -> None:
         initialize_app(credential=credentials.ApplicationDefault(), options={"projectId": PROJECT_ID})
         self.client: FirestoreClient = firestore.client()
-        self.__init_collections__()
+        self._init_collections()
 
-    def __init_collections__(self) -> None:
-        """Initializes the collections"""
+    def _init_collections(self) -> None:
+        """Initialize the collections."""
         self.users = UserCollection(self.client)
         self.filters = FilterCollection(self.users)
         self.channels = ChannelCollection(self.users)

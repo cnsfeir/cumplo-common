@@ -10,7 +10,7 @@ from google.protobuf.timestamp_pb2 import Timestamp
 from cumplo_common.utils.constants import LOCATION, PROJECT_ID, SERVICE_ACCOUNT_EMAIL
 
 
-def create_http_task(  # pylint: disable=too-many-arguments,too-many-locals
+def create_http_task(  # noqa: PLR0913, PLR0917
     url: str,
     queue: str,
     payload: dict,
@@ -19,6 +19,7 @@ def create_http_task(  # pylint: disable=too-many-arguments,too-many-locals
     dispatch_deadline: int | None = None,
     schedule_time: datetime | None = None,
     http_method: Annotated[int, HttpMethod] = HttpMethod.POST,
+    *,
     is_internal: bool = True,
 ) -> Task:
     """
@@ -37,6 +38,7 @@ def create_http_task(  # pylint: disable=too-many-arguments,too-many-locals
 
     Returns:
         Task: A unit of scheduled work
+
     """
     client = CloudTasksClient()
 

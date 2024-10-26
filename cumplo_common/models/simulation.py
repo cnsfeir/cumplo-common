@@ -25,15 +25,13 @@ class Simulation(BaseModel):
     @computed_field
     @cached_property
     def investment(self) -> int:
-        """Returns the investment of the simulation"""
+        """Returns the investment of the simulation."""
         return SIMULATION_AMOUNT + self.cumplo_points
 
     @computed_field
     @cached_property
     def cash_flows(self) -> list[int]:
-        """
-        Returns the cash flows of the simulation
-        """
+        """Returns the cash flows of the simulation."""
         installments = [
             installment.amount - self.platform_fee if index == len(self.payment_schedule) else installment.amount
             for index, installment in enumerate(self.payment_schedule, start=1)
@@ -43,5 +41,5 @@ class Simulation(BaseModel):
 
     @cached_property
     def profit_rate(self) -> Decimal:
-        """Returns the profit rate of the simulation"""
+        """Returns the profit rate of the simulation."""
         return round(Decimal((SIMULATION_AMOUNT + self.net_returns) / self.investment - 1), 4)

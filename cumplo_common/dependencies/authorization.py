@@ -6,15 +6,16 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 
 
-async def is_admin(request: Request) -> None:
+def is_admin(request: Request) -> None:
     """
-    Authenticates that the user is admin
+    Authenticate that the user is admin.
 
     Args:
         request (Request): The request to authenticate
 
     Raises:
         HTTPException: When the user is not admin
+
     """
     user = request.state.user
     if not user.is_admin:

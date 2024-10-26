@@ -1,5 +1,4 @@
 # mypy: disable-error-code="call-overload"
-# pylint: disable=no-member
 
 from decimal import Decimal
 from json import loads
@@ -27,10 +26,7 @@ class BorrowerFilterConfiguration(BaseModel):
 
 
 class FilterConfiguration(BaseModel):
-    """
-    Represents the configuration settings for filtering funding requests
-    to determine promising investment opportunities.
-    """
+    """Configuration settings for filtering funding requests to determine promising investment opportunities."""
 
     id: ulid.ULID = Field(...)
     name: str | None = Field(None)
@@ -50,18 +46,18 @@ class FilterConfiguration(BaseModel):
     @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: ulid.default.api.ULIDPrimitive) -> ulid.ULID:
-        """Formats the ID field as an ULID object"""
+        """Format the ID field as an ULID object."""
         return ulid.parse(value)
 
     def __hash__(self) -> int:
-        """Returns the hash of the object"""
+        """Return the hash of the object."""
         return hash(self.model_dump_json(exclude={"id", "name"}, exclude_none=True))
 
     def json(self, *args: Any, **kwargs: Any) -> dict:  # type: ignore[override]
         """
-        Returns the model as a JSON parsed dict
+        Return the model as a JSON parsed dict.
 
-        Returns:
-            dict: JSON parsed dict representation of the model
+        Returns:     dict: JSON parsed dict representation of the model
+
         """
-        return loads(self.model_dump_json(exclude_defaults=True, *args, **kwargs))
+        return loads(self.model_dump_json(*args, **kwargs, exclude_defaults=True))
