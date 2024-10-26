@@ -1,4 +1,4 @@
-from cumplo_common.models.filter_configuration import FilterConfiguration
+from cumplo_common.models import FilterConfiguration
 
 
 class TestFilterConfiguration:

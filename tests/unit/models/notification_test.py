@@ -1,7 +1,6 @@
 from pytest import raises
 
-from cumplo_common.models.notification import Notification
-from cumplo_common.models.template import Template
+from cumplo_common.models import Notification, Template
 
 BASE_NOTIFICATION = {"date": "2021-01-01T00:00:00+00:00"}
 

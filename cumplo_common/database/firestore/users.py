@@ -4,12 +4,13 @@ from logging import getLogger
 from google.cloud.firestore_v1 import Client as FirestoreClient
 from google.cloud.firestore_v1.base_query import FieldFilter
 
-from cumplo_common.database.firestore.channels import ChannelCollection
-from cumplo_common.database.firestore.filters import FilterCollection
-from cumplo_common.database.firestore.notifications import NotificationCollection
-from cumplo_common.models.user import User
+from cumplo_common.models import User
 from cumplo_common.utils.constants import USERS_COLLECTION
 from cumplo_common.utils.text import secure_key
+
+from .channels import ChannelCollection
+from .filters import FilterCollection
+from .notifications import NotificationCollection
 
 logger = getLogger(__name__)
 

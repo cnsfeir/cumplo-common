@@ -28,7 +28,7 @@ class PubSubEvent(BaseModel):
     @property
     def id_user(self) -> str | None:
         """Returns the ID of the user who triggered the event."""
-        return self.message.attributes.get("id_user")  # pylint: disable=no-member
+        return self.message.attributes.get("id_user")
 
 
 class PubSubMiddleware(BaseHTTPMiddleware):

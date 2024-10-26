@@ -1,6 +1,6 @@
 import babel.numbers
 
-from cumplo_common.models.currency import Currency
+from cumplo_common.models import Currency
 
 
 def format_currency(amount: int, currency: Currency = Currency.CLP) -> str:

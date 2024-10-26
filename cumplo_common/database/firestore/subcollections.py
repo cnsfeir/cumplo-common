@@ -3,7 +3,7 @@ from typing import Any, Protocol
 
 from google.cloud.firestore_v1.collection import CollectionReference
 
-from cumplo_common.models.base_model import BaseModel
+from cumplo_common.models import BaseModel
 
 
 class User(Protocol):

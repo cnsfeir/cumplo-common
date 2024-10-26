@@ -1,9 +1,7 @@
-# pylint: disable=arguments-differ, invalid-name
-
 from typing import Self
 
-from cumplo_common.models.base_model import StrEnum
-from cumplo_common.models.subject import Subject
+from .subject import Subject
+from .utils import StrEnum
 
 
 class Template(StrEnum):

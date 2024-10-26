@@ -1,15 +1,13 @@
-import enum
 from abc import ABC
-from collections.abc import Generator
 from json import loads
-from typing import Any, Self
+from typing import Any
 
-from pydantic import BaseModel as PydanticBaseModel
+import pydantic
 from pydantic import ConfigDict, model_validator
 from ulid import ULID
 
 
-class BaseModel(PydanticBaseModel, ABC):
+class BaseModel(pydantic.BaseModel, ABC):
     """Base class for all models in the project."""
 
     model_config = ConfigDict(
@@ -71,30 +69,3 @@ class BaseModel(PydanticBaseModel, ABC):
 
         cls._remove_computed_fields(core_schema, values)
         return values
-
-
-class StrEnum(enum.StrEnum):
-    @classmethod
-    def _missing_(cls, value: object) -> Self | None:
-        """Return the enum member case insensitively."""
-        if isinstance(value, str):
-            for member in cls:
-                if member.casefold() == value.casefold():
-                    return member
-        return None
-
-    @classmethod
-    def has_member(cls, value: str) -> bool:
-        """Whether the enum has a member case insensitively."""
-        return any(value.casefold() == item.name.casefold() for item in cls)
-
-    @classmethod
-    def members(cls) -> Generator[Self, None, None]:
-        """
-        Yield the enum members.
-
-        Yields:
-            Self: The enum members.
-
-        """
-        yield from cls

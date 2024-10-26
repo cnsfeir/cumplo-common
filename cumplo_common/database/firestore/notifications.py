@@ -3,7 +3,7 @@ from logging import getLogger
 import arrow
 
 from cumplo_common.database.firestore.subcollections import UserSubcollection
-from cumplo_common.models.notification import Notification
+from cumplo_common.models import Notification
 from cumplo_common.utils.constants import NOTIFICATIONS_COLLECTION
 
 logger = getLogger(__name__)

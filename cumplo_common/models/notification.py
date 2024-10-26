@@ -6,10 +6,11 @@ from re import fullmatch
 import arrow
 from pydantic import Field, model_validator
 
-from cumplo_common.models.base_model import BaseModel
-from cumplo_common.models.pydantic import ValidatorMode
-from cumplo_common.models.template import Template
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
+
+from .base_model import BaseModel
+from .pydantic import ValidatorMode
+from .template import Template
 
 
 class Notification(BaseModel):

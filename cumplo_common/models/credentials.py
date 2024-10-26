@@ -1,8 +1,6 @@
-# pylint: disable=no-member
-
 from pydantic import Field
 
-from cumplo_common.models.base_model import BaseModel
+from .base_model import BaseModel
 
 
 class Credentials(BaseModel):

@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from cumplo_common.database.firestore.subcollections import UserSubcollection
-from cumplo_common.models.filter_configuration import FilterConfiguration
+from cumplo_common.models import FilterConfiguration
 from cumplo_common.utils.constants import FILTERS_COLLECTION
 
 logger = getLogger(__name__)

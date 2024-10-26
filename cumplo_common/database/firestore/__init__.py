@@ -5,11 +5,12 @@ from firebase_admin import credentials, firestore, initialize_app
 if TYPE_CHECKING:
     from google.cloud.firestore_v1 import Client as FirestoreClient
 
-from cumplo_common.database.firestore.channels import ChannelCollection
-from cumplo_common.database.firestore.filters import FilterCollection
-from cumplo_common.database.firestore.notifications import NotificationCollection
-from cumplo_common.database.firestore.users import UserCollection
 from cumplo_common.utils.constants import PROJECT_ID
+
+from .channels import ChannelCollection
+from .filters import FilterCollection
+from .notifications import NotificationCollection
+from .users import UserCollection
 
 
 class Client:

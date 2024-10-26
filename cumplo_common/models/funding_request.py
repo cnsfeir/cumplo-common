@@ -1,4 +1,3 @@
-# pylint: disable=no-member
 # mypy: disable-error-code="misc, override"
 
 from decimal import Decimal
@@ -7,13 +6,15 @@ from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.models.base_model import BaseModel, StrEnum
-from cumplo_common.models.borrower import Borrower
-from cumplo_common.models.credit import CreditType
-from cumplo_common.models.currency import Currency
-from cumplo_common.models.debtor import Debtor
-from cumplo_common.models.simulation import Simulation
 from cumplo_common.utils.constants import CUMPLO_BASE_URL
+
+from .base_model import BaseModel
+from .borrower import Borrower
+from .credit import CreditType
+from .currency import Currency
+from .debtor import Debtor
+from .simulation import Simulation
+from .utils import StrEnum
 
 
 class DurationUnit(StrEnum):

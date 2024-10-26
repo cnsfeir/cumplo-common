@@ -6,8 +6,9 @@ from functools import cached_property
 
 from pydantic import Field, computed_field
 
-from cumplo_common.models.base_model import BaseModel
 from cumplo_common.utils.constants import SIMULATION_AMOUNT
+
+from .base_model import BaseModel
 
 
 class SimulationInstallment(BaseModel):

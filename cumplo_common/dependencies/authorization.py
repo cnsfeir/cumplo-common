@@ -1,5 +1,3 @@
-# pylint: disable=raise-missing-from
-
 from http import HTTPStatus
 
 from fastapi.exceptions import HTTPException

@@ -1,5 +1,3 @@
-# pylint: disable=raise-missing-from
-
 from http import HTTPStatus
 from logging import getLogger
 from typing import Annotated
