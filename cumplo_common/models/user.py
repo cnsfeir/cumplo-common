@@ -13,7 +13,6 @@ from .channel import ChannelConfiguration
 from .credentials import Credentials
 from .filter_configuration import FilterConfiguration
 from .notification import Notification
-from .pydantic import ValidatorMode
 
 
 class User(BaseModel):
@@ -28,7 +27,7 @@ class User(BaseModel):
     filters_query: Callable[[str], dict[str, FilterConfiguration]] = Field(..., exclude=True)
     channels_query: Callable[[str], dict[str, ChannelConfiguration]] = Field(..., exclude=True)
 
-    @field_validator("id", mode=ValidatorMode.BEFORE)
+    @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
         """Format the ID field as an ULID object."""

@@ -20,7 +20,7 @@ class Notification(BaseModel):
     template: Template = Field(...)
     expiration_minutes: int = Field(DEFAULT_EXPIRATION_MINUTES)
 
-    @model_validator(mode=ValidatorMode.BEFORE)
+    @model_validator(mode="before")
     @classmethod
     def format_data(cls, values: dict) -> dict:
         """Format the data before validation."""
