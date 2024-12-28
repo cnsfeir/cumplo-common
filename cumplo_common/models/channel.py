@@ -10,7 +10,7 @@ from pydantic import Field, field_validator
 from cumplo_common.utils.constants import PHONE_NUMBER_REGEX
 
 from .base_model import BaseModel
-from .template import Template
+from .event import Event
 from .utils import StrEnum
 
 
@@ -26,7 +26,7 @@ class ChannelConfiguration(BaseModel, ABC):
     id: ulid.ULID = Field(...)
     enabled: bool = Field(True)
     type_: ChannelType = Field(...)
-    events: list[Template] = Field(default_factory=list)
+    events: list[Event] = Field(default_factory=list)
 
     @field_validator("id", mode="before")
     @classmethod

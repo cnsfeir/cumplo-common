@@ -1,5 +1,3 @@
-# mypy: disable-error-code="call-overload"
-
 from datetime import datetime
 from re import fullmatch
 
@@ -9,15 +7,14 @@ from pydantic import Field, model_validator
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 
 from .base_model import BaseModel
-from .pydantic import ValidatorMode
-from .template import Template
+from .event import Event
 
 
 class Notification(BaseModel):
     id: str = Field(...)
+    event: Event = Field(...)
     date: datetime = Field(...)
     content_id: int = Field(...)
-    template: Template = Field(...)
     expiration_minutes: int = Field(DEFAULT_EXPIRATION_MINUTES)
 
     @model_validator(mode="before")
@@ -28,14 +25,14 @@ class Notification(BaseModel):
 
     @staticmethod
     def _process_id(values: dict) -> dict:
-        """Separate the actual ID and the template from the ID field."""
+        """Separate the actual ID and the event from the ID field."""
         if not (id_ := values.get("id")):
             return values
 
-        if not fullmatch(r"^[a-zA-Z]+_\d+$", id_):
+        if not fullmatch(r"^[a-zA-Z_]+\.[a-zA-Z_]+-\d+$", id_):
             raise ValueError("Invalid ID format")
 
-        values["template"], values["content_id"] = id_.split("_")
+        values["event"], values["content_id"] = id_.split("-")
         return values
 
     @property
@@ -53,16 +50,16 @@ class Notification(BaseModel):
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) > arrow.utcnow()
 
     @staticmethod
-    def build_id(template: Template, content_id: int) -> str:
+    def build_id(event: Event, content_id: int) -> str:
         """
         Build the ID for a notification.
 
         Args:
-            template (Template): Notification template
+            event (Event): Notification event
             content_id (int): Notification content ID
 
         Returns:
             str: Notification ID
 
         """
-        return f"{template.value}_{content_id}"
+        return f"{event.value}-{content_id}"

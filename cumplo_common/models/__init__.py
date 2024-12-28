@@ -18,10 +18,7 @@ from .funding_request import FundingRequest
 from .investment import Investment
 from .movement import Movement
 from .notification import Notification
-from .pydantic import ValidatorMode
 from .simulation import Simulation
-from .subject import Subject
-from .template import Template
 from .user import User
 from .utils import StrEnum
 
@@ -44,10 +41,7 @@ __all__ = [
     "Notification",
     "Simulation",
     "StrEnum",
-    "Subject",
-    "Template",
     "User",
-    "ValidatorMode",
     "WebhookConfiguration",
     "WhatsappConfiguration",
 ]

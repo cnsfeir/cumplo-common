@@ -1,35 +1,38 @@
-from pytest import raises
+import random
 
-from cumplo_common.models import Notification, Template
+import arrow
+import pytest
+from pydantic import ValidationError
 
-BASE_NOTIFICATION = {"date": "2021-01-01T00:00:00+00:00"}
+from cumplo_common.models import Event, Notification
 
 
 class TestNotification:
-    def test_invalid_id_format(self) -> None:
-        """Should raise a ValueError if the ID format is invalid."""
-        invalid_ids = ("123_alpha", "alpha-beta_123", "alpha_", "_123", "alpha123")
-        for id_ in invalid_ids:
-            with raises(ValueError, match="Invalid ID format"):
-                Notification.model_validate({"id": id_, **BASE_NOTIFICATION})
-
-    def test_invalid_id_values(self) -> None:
-        """Should raise a ValueError if the ID value is invalid."""
-        invalid_ids = ("alpha_123", "BETA_456", "MixEDCaSe_789")
-        for id_ in invalid_ids:
-            with raises(ValueError):
-                Notification.model_validate({"id": id_, **BASE_NOTIFICATION})
-
-    def test_valid_id(self) -> None:
-        """Should process the ID correctly."""
-        invalid_ids = ("PROMISING_123", "Promising_456", "promising_789")
-        for id_ in invalid_ids:
-            notification = Notification.model_validate({"id": id_, **BASE_NOTIFICATION})
-            assert notification.template == Template.PROMISING
-            assert notification.content_id == int(id_.split("_")[1])
-
     def test_build_id(self) -> None:
         """Should build the ID correctly."""
-        for template in Template.members():
-            id_ = Notification.build_id(template, 1001)
-            assert id_ == f"{template.value}_1001"
+        for event in Event.members():
+            content_id = random.randint(1, 1000)  # noqa: S311
+            id_ = Notification.build_id(event, content_id)
+            assert id_ == f"{event.value}-{content_id}"
+
+            notification = Notification.model_validate({"id": id_, "date": arrow.utcnow().datetime})
+            assert notification.content_id == int(id_.split("-")[1])
+            assert notification.event == event
+
+    @pytest.mark.parametrize(
+        "invalid_id",
+        [
+            "event_type..action-123",  # Extra dot
+            "event_type.action123",  # Missing dash
+            "event_type@action-123",  # Special character
+            ".action-123",  # Missing part before the dot
+            "event_type.-123",  # Missing part after the dot
+            "event_type action-123",  # Space instead of dot
+            "event_type/action-123",  # Slash instead of dot
+            "event_type.action.123",  # Extra dot after event
+            "event_type.action-",  # Missing content_id after the dash
+        ],
+    )
+    def test_invalid_id_formats_raise_error(self, invalid_id: str) -> None:
+        with pytest.raises(ValidationError, match="Invalid ID format"):
+            Notification.model_validate({"id": invalid_id, "date": arrow.utcnow().datetime})
