@@ -6,7 +6,7 @@ from functools import cached_property
 
 from pydantic import Field
 
-from cumplo_common.models.base_model import BaseModel
+from .base_model import BaseModel
 
 
 class DebtPortfolio(BaseModel):
@@ -18,9 +18,7 @@ class DebtPortfolio(BaseModel):
 
     @cached_property
     def paid_in_time(self) -> Decimal | None:
-        """
-        The percentage of paid in time based on the total paid funding requests
-        """
+        """The percentage of paid in time based on the total paid funding requests."""
         if not (self.total_requests and self.completed):
             return None
         return min(round(Decimal(self.in_time / self.completed), 3), Decimal(1))

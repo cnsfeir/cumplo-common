@@ -1,5 +1,4 @@
 # mypy: disable-error-code="misc, call-overload"
-# pylint: disable=no-member
 
 from collections.abc import Callable
 from functools import cached_property
@@ -7,13 +6,14 @@ from functools import cached_property
 import ulid
 from pydantic import Field, PositiveInt, field_validator
 
-from cumplo_common.models.base_model import BaseModel
-from cumplo_common.models.channel import ChannelConfiguration
-from cumplo_common.models.credentials import Credentials
-from cumplo_common.models.filter_configuration import FilterConfiguration
-from cumplo_common.models.notification import Notification
-from cumplo_common.models.pydantic import ValidatorMode
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
+
+from .base_model import BaseModel
+from .channel import ChannelConfiguration
+from .credentials import Credentials
+from .filter_configuration import FilterConfiguration
+from .notification import Notification
+from .pydantic import ValidatorMode
 
 
 class User(BaseModel):
@@ -31,35 +31,38 @@ class User(BaseModel):
     @field_validator("id", mode=ValidatorMode.BEFORE)
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
-        """Formats the ID field as an ULID object"""
+        """Format the ID field as an ULID object."""
         return ulid.parse(value)
 
     @cached_property
     def filters(self) -> dict[str, FilterConfiguration]:
         """
-        Returns the user filters
+        Returns the user filters.
 
         Returns:
             dict[str, FilterConfiguration]: A dictionary of filters
+
         """
-        return self.filters_query(str(self.id))  # pylint: disable=not-callable
+        return self.filters_query(str(self.id))
 
     @cached_property
     def notifications(self) -> dict[str, Notification]:
         """
-        Returns the user notifications
+        Returns the user notifications.
 
         Returns:
             dict[str, Notification]: A dictionary of notifications
+
         """
-        return self.notifications_query(str(self.id))  # pylint: disable=not-callable
+        return self.notifications_query(str(self.id))
 
     @cached_property
     def channels(self) -> dict[str, ChannelConfiguration]:
         """
-        Returns the user channels
+        Returns the user channels.
 
         Returns:
             dict[str, ChannelConfiguration]: A dictionary of channels
+
         """
-        return self.channels_query(str(self.id))  # pylint: disable=not-callable
+        return self.channels_query(str(self.id))

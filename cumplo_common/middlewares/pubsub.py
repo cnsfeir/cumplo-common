@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 
 class PubSubMessage(BaseModel):
-    """A wrapped Pub/Sub message"""
+    """A wrapped Pub/Sub message."""
 
     publish_time: str | None = Field(None)
     attributes: dict = Field(default_factory=dict)
@@ -20,19 +20,20 @@ class PubSubMessage(BaseModel):
 
 
 class PubSubEvent(BaseModel):
-    """A Pub/Sub event"""
+    """A Pub/Sub event."""
 
     message: PubSubMessage = Field(...)
     subscription: str = Field(...)
 
     @property
     def id_user(self) -> str | None:
-        """Returns the ID of the user who triggered the event"""
-        return self.message.attributes.get("id_user")  # pylint: disable=no-member
+        """Returns the ID of the user who triggered the event."""
+        return self.message.attributes.get("id_user")
 
 
 class PubSubMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
+    @staticmethod
+    async def dispatch(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
         """
         Middleware to handle PubSub messages.
 
@@ -42,8 +43,8 @@ class PubSubMiddleware(BaseHTTPMiddleware):
 
         Returns:
             Response: A response object.
-        """
 
+        """
         try:
             body = await request.body()
             content = json.loads(body.decode("utf-8"))
@@ -54,7 +55,6 @@ class PubSubMiddleware(BaseHTTPMiddleware):
             logger.debug("Received a non-PubSub request")
 
         else:
-            request._body = b64decode(event.message.data)  # pylint: disable=protected-access
+            request._body = b64decode(event.message.data)  # noqa: SLF001
 
-        response = await call_next(request)
-        return response
+        return await call_next(request)

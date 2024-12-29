@@ -1,9 +1,7 @@
-# pylint: disable=arguments-differ, invalid-name
-
 from typing import Self
 
-from cumplo_common.models.base_model import StrEnum
-from cumplo_common.models.subject import Subject
+from .subject import Subject
+from .utils import StrEnum
 
 
 class Template(StrEnum):
@@ -11,7 +9,7 @@ class Template(StrEnum):
     subject: Subject
     is_recurring: bool
 
-    def __new__(cls, value: str, subject: Subject, is_recurring: bool) -> Self:
+    def __new__(cls, value: str, subject: Subject, is_recurring: bool) -> Self:  # noqa: FBT001
         obj = str.__new__(cls, value)
         obj.is_recurring = is_recurring
         obj._value_ = value

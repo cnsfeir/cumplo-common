@@ -1,4 +1,3 @@
-# pylint: disable=no-member
 # mypy: disable-error-code="misc, override"
 
 from decimal import Decimal
@@ -7,13 +6,15 @@ from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.models.base_model import BaseModel, StrEnum
-from cumplo_common.models.borrower import Borrower
-from cumplo_common.models.credit import CreditType
-from cumplo_common.models.currency import Currency
-from cumplo_common.models.debtor import Debtor
-from cumplo_common.models.simulation import Simulation
 from cumplo_common.utils.constants import CUMPLO_BASE_URL
+
+from .base_model import BaseModel
+from .borrower import Borrower
+from .credit import CreditType
+from .currency import Currency
+from .debtor import Debtor
+from .simulation import Simulation
+from .utils import StrEnum
 
 
 class DurationUnit(StrEnum):
@@ -52,7 +53,7 @@ class FundingRequest(BaseModel):
     @computed_field
     @cached_property
     def profit_rate(self) -> Decimal:
-        """Calculates the profit rate for the funding request"""
+        """Calculates the profit rate for the funding request."""
         if self.installments > 1:
             value = self.simulation.profit_rate
         else:
@@ -62,30 +63,31 @@ class FundingRequest(BaseModel):
     @computed_field
     @cached_property
     def monthly_profit_rate(self) -> Decimal:
-        """Calculates the monthly profit rate for the funding request"""
+        """Calculates the monthly profit rate for the funding request."""
         value = (1 + self.irr / 100) ** Decimal(1 / 12) - 1
         return round(Decimal(value), ndigits=4)
 
     @computed_field
     @cached_property
     def is_completed(self) -> bool:
-        """Checks if the funding request is fully funded"""
+        """Checks if the funding request is fully funded."""
         return self.raised_percentage == Decimal(1)
 
     @computed_field
     @cached_property
     def url(self) -> str:
-        """Builds the URL for the funding request"""
+        """Builds the URL for the funding request."""
         return f"{CUMPLO_BASE_URL}/{self.id}"
 
     def monthly_profit(self, amount: int) -> int:
         """
-        Calculates the monthly profit for a given amount
+        Calculate the monthly profit for a given amount.
 
         Args:
             amount (int): The amount to calculate the profit for
 
         Returns:
             int: The monthly profit for the given amount
+
         """
         return ceil(self.monthly_profit_rate * amount)
