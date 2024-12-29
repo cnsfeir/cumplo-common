@@ -1,18 +1,23 @@
 from typing import Self
 
-from .base_model import BaseModel
+from pydantic import BaseModel
+
 from .funding_request import FundingRequest
 from .investment import Investment
 from .movement import Movement
 from .utils import StrEnum
 
 
+class EventModel(BaseModel):
+    id: int
+
+
 class Event(StrEnum):
     _name_: str
-    model: BaseModel
+    model: type[EventModel]
     is_recurring: bool
 
-    def __new__(cls, value: str, model: BaseModel, is_recurring: bool = False) -> Self:  # noqa: FBT001, FBT002
+    def __new__(cls, value: str, model: type[EventModel], is_recurring: bool = False) -> Self:  # noqa: FBT001, FBT002
         """Create a new instance of the Enum with the given value and model."""
         obj = str.__new__(cls, value)
         obj.is_recurring = is_recurring
