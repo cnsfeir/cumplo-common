@@ -11,9 +11,9 @@ from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 from .base_model import BaseModel
 from .channel import ChannelConfiguration
 from .credentials import Credentials
+from .event import Event, EventModel
 from .filter_configuration import FilterConfiguration
 from .notification import Notification
-from .pydantic import ValidatorMode
 
 
 class User(BaseModel):
@@ -28,7 +28,7 @@ class User(BaseModel):
     filters_query: Callable[[str], dict[str, FilterConfiguration]] = Field(..., exclude=True)
     channels_query: Callable[[str], dict[str, ChannelConfiguration]] = Field(..., exclude=True)
 
-    @field_validator("id", mode=ValidatorMode.BEFORE)
+    @field_validator("id", mode="before")
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
         """Format the ID field as an ULID object."""
@@ -66,3 +66,25 @@ class User(BaseModel):
 
         """
         return self.channels_query(str(self.id))
+
+    def already_notified(self, event: Event, content: EventModel) -> bool:
+        """
+        Check if the given user has already been notified with the given event and content.
+
+        Args:
+            user (User): The user who's being notified
+            event (Event): The event used to notify the user
+            content (SubjectContent): The content of the notification
+
+        Returns:
+            bool: Whether the user has already been notified with the given event and content
+
+        """
+        if not event.is_recurring:
+            return False
+
+        id_notification = Notification.build_id(event, content.id)
+        if not (notification := self.notifications.get(id_notification)):
+            return False
+
+        return notification.has_expired

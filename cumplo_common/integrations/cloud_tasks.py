@@ -14,7 +14,7 @@ class CloudTasks:
     """Integration with Google Cloud Tasks."""
 
     @staticmethod
-    def create_http_task(  # noqa: PLR0913, PLR0917
+    def create_task(  # noqa: PLR0913, PLR0917
         url: str,
         queue: str,
         payload: dict,

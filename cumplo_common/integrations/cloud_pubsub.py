@@ -9,7 +9,7 @@ class CloudPubSub:
     """Integration with Google Cloud Pub/Sub."""
 
     @staticmethod
-    def publish_event(content: dict | list, topic: str, **attributes: str) -> str:
+    def publish(content: dict | list, topic: str, **attributes: str) -> str:
         """
         Publish an event to a topic with the given attributes.
 
