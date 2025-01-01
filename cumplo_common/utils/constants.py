@@ -26,3 +26,7 @@ DEFAULT_EXPIRATION_MINUTES: int = int(os.getenv("DEFAULT_EXPIRATION_MINUTES", "6
 
 # Validators
 PHONE_NUMBER_REGEX = r"^\+[1-9]\d{1,14}$"
+
+# Cache
+CACHE_MAXSIZE = int(os.getenv("CACHE_MAXSIZE", "1000"))
+CACHE_TTL = int(os.getenv("CACHE_TTL", "600"))

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "1.3.2"
+version = "1.3.3"
 description = "A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"
 authors = ["Cristobal Sfeir <hello@crisotbalsfeir.com>"]
 packages = [{ include = "cumplo_common" }]
@@ -17,6 +17,7 @@ types-protobuf = "^4.23.0.2"
 fastapi = "^0.109.1"
 ulid-py = "^1.1.0"
 google-cloud-pubsub = "^2.18.4"
+cachetools = "^5.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.2"
@@ -50,6 +51,7 @@ module = [
     "starlette.*",
     "google.cloud.pubsub.*",
     "numpy_financial.*",
+    "cachetools.*",
 ]
 ignore_missing_imports = true
 
@@ -77,6 +79,7 @@ ignore = [
     "COM812", # Missing trailing comma in a dictionary
     "ISC001", # Implicit string concatenation
     "CPY001", # Copying notice
+    "B019",   # LRU cache can generate memory leaks (when used without a maxsize)
     # =====
     "PT011",  # ValueError is too broad, set the `match` parameter
     "PT013",  # Incorrect import of `pytest`; use `import pytest` instead

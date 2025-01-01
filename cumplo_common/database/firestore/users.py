@@ -1,11 +1,12 @@
 from collections.abc import Generator
 from logging import getLogger
 
+from cachetools import TTLCache, cached
 from google.cloud.firestore_v1 import Client as FirestoreClient
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 from cumplo_common.models import User
-from cumplo_common.utils.constants import USERS_COLLECTION
+from cumplo_common.utils.constants import CACHE_MAXSIZE, CACHE_TTL, USERS_COLLECTION
 from cumplo_common.utils.text import secure_key
 
 from .channels import ChannelCollection
@@ -13,6 +14,7 @@ from .filters import FilterCollection
 from .notifications import NotificationCollection
 
 logger = getLogger(__name__)
+cache = TTLCache(maxsize=CACHE_MAXSIZE, ttl=CACHE_TTL)
 
 
 class UserCollection:
@@ -20,6 +22,7 @@ class UserCollection:
         self.collection = client.collection(USERS_COLLECTION)
         self.client = client
 
+    @cached(cache=cache)
     def get(self, id_user: str | None = None, api_key: str | None = None) -> User:
         """
         Get a user document.
