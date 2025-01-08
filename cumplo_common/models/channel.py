@@ -124,3 +124,5 @@ CHANNEL_CONFIGURATION_BY_TYPE: dict[ChannelType, type[ChannelConfiguration]] = {
     ChannelType.WEBHOOK: WebhookConfiguration,
     ChannelType.IFTTT: IFTTTConfiguration,
 }
+
+ChannelConfigurationType = IFTTTConfiguration | WhatsappConfiguration | WebhookConfiguration
