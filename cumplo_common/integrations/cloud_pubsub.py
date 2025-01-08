@@ -25,5 +25,5 @@ class CloudPubSub:
         publisher = PublisherClient()
         topic = f"projects/{PROJECT_ID}/topics/{topic}"
         data = json.dumps(content).encode()
-        future = publisher.publish(topic, data, **attributes)
+        future = publisher.publish(topic=topic, data=data, **attributes)
         return future.result()
