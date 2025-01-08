@@ -1,5 +1,6 @@
 from datetime import datetime
 from re import fullmatch
+from typing import Self
 
 import arrow
 from pydantic import Field, model_validator
@@ -22,6 +23,14 @@ class Notification(BaseModel):
     def format_data(cls, values: dict) -> dict:
         """Format the data before validation."""
         return cls._process_id(values)
+
+    @classmethod
+    def new(cls, event: Event, content_id: int) -> Self:
+        """Create a new notification."""
+        return cls.model_validate({
+            "date": arrow.utcnow().datetime,
+            "id": cls.build_id(event, content_id),
+        })
 
     @staticmethod
     def _process_id(values: dict) -> dict:
