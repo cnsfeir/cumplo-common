@@ -1,25 +1,22 @@
 from collections.abc import Generator
 from logging import getLogger
 
-from cachetools import TTLCache, cached
+from cachetools import cached
 from google.cloud.firestore_v1 import Client as FirestoreClient
-from google.cloud.firestore_v1.base_query import FieldFilter
 
 from cumplo_common.models import User
-from cumplo_common.utils.constants import CACHE_MAXSIZE, CACHE_TTL, USERS_COLLECTION
+from cumplo_common.utils.cache import Cache
+from cumplo_common.utils.constants import CACHE_MAXSIZE, KEYS_COLLECTION, USERS_CACHE_TTL, USERS_COLLECTION
 from cumplo_common.utils.text import secure_key
 
-from .channels import ChannelCollection
-from .filters import FilterCollection
-from .notifications import NotificationCollection
-
 logger = getLogger(__name__)
-cache = TTLCache(maxsize=CACHE_MAXSIZE, ttl=CACHE_TTL)
+cache = Cache(maxsize=CACHE_MAXSIZE, ttl=USERS_CACHE_TTL)
 
 
 class UserCollection:
     def __init__(self, client: FirestoreClient) -> None:
         self.collection = client.collection(USERS_COLLECTION)
+        self.keys = client.collection(KEYS_COLLECTION)
         self.client = client
 
     @cached(cache=cache)
@@ -33,7 +30,7 @@ class UserCollection:
 
         Raises:
             KeyError: When the user does not exist
-            ValueError: When the user data is empty
+            ValueError: When the user data is empty or the API key is not valid
 
         Returns:
             User: The user object containing the user data
@@ -42,31 +39,23 @@ class UserCollection:
         if not (id_user or api_key):
             raise ValueError("Either ID or API key must be provided")
 
-        if id_user:
-            logger.info(f"Getting user with ID {id_user} from Firestore")
-            user = self.collection.document(id_user).get()
-            if not user.exists:
-                raise KeyError(f"User with ID {id_user} does not exist")
-
-        elif api_key:
+        if not id_user and api_key:
             logger.info(f"Getting user with API key {secure_key(api_key)} from Firestore")
-            filter_ = FieldFilter("api_key", "==", api_key)
-            stream = self.collection.where(filter=filter_).stream()
+            key = self.keys.document(api_key).get()
 
-            if not (user := next(stream, None)):  # type: ignore[arg-type]
+            if not key.exists or not (data := key.to_dict()):
                 raise KeyError(f"User with API key {secure_key(api_key)} does not exist")
 
-        if not (data := user.to_dict()):
-            raise ValueError("User data is empty")
+            id_user = data["id_user"]
 
-        return User(
-            id=user.id,
-            filters_query=FilterCollection(self).get_all,
-            channels_query=ChannelCollection(self).get_all,
-            notifications_query=NotificationCollection(self).get_all,
-            **data,
-        )
+        user = self.collection.document(id_user).get()
 
+        if not user.exists or not (data := user.to_dict()):
+            raise KeyError(f"User with ID {id_user} does not exist")
+
+        return User(id=user.id, **data)
+
+    @cached(cache=cache)
     def get_all(self) -> Generator[User, None, None]:
         """
         Get all the users data.
@@ -78,13 +67,7 @@ class UserCollection:
         logger.info("Getting all users from Firestore")
         for user in self.collection.stream():
             if data := user.to_dict():
-                yield User(
-                    id=user.id,
-                    filters_query=FilterCollection(self).get_all,
-                    channels_query=ChannelCollection(self).get_all,
-                    notifications_query=NotificationCollection(self).get_all,
-                    **data,
-                )
+                yield User(id=user.id, **data)
 
     def put(self, user: User) -> None:
         """

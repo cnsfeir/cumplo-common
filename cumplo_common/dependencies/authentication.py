@@ -26,8 +26,8 @@ def authenticate(request: Request, x_api_key: Annotated[str | None, Header()] = 
     if x_api_key:
         try:
             user = firestore.client.users.get(api_key=x_api_key)
-        except (KeyError, ValueError):
-            logger.debug("Received invalid API key")
+        except (KeyError, ValueError) as exception:
+            logger.debug(f"Authentication error: {exception}")
             raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED) from None
 
     elif event := getattr(request.state, "event", None):

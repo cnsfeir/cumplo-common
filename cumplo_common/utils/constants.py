@@ -16,6 +16,7 @@ CHANNELS_COLLECTION: str = os.getenv("CHANNELS_COLLECTION", "channels")
 FILTERS_COLLECTION: str = os.getenv("FILTERS_COLLECTION", "filters")
 NOTIFICATIONS_COLLECTION: str = os.getenv("NOTIFICATIONS_COLLECTION", "notifications")
 USERS_COLLECTION: str = os.getenv("USERS_COLLECTION", "users")
+KEYS_COLLECTION: str = os.getenv("KEYS_COLLECTION", "keys")
 
 # Cumplo
 CUMPLO_BASE_URL: str = os.getenv("CUMPLO_BASE_URL", "")
@@ -29,4 +30,4 @@ PHONE_NUMBER_REGEX = r"^\+[1-9]\d{1,14}$"
 
 # Cache
 CACHE_MAXSIZE = int(os.getenv("CACHE_MAXSIZE", "1000"))
-CACHE_TTL = int(os.getenv("CACHE_TTL", "600"))
+USERS_CACHE_TTL = int(os.getenv("USERS_CACHE_TTL", "600"))
