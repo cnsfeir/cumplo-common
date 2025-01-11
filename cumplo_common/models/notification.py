@@ -8,12 +8,12 @@ from pydantic import Field, model_validator
 from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 
 from .base_model import BaseModel
-from .event import Event
+from .event_public import PublicEvent
 
 
 class Notification(BaseModel):
     id: str = Field(...)
-    event: Event = Field(...)
+    event: PublicEvent = Field(...)
     date: datetime = Field(...)
     content_id: int = Field(...)
     expiration_minutes: int = Field(DEFAULT_EXPIRATION_MINUTES)
@@ -25,7 +25,7 @@ class Notification(BaseModel):
         return cls._process_id(values)
 
     @classmethod
-    def new(cls, event: Event, content_id: int) -> Self:
+    def new(cls, event: PublicEvent, content_id: int) -> Self:
         """Create a new notification."""
         return cls.model_validate({
             "date": arrow.utcnow().datetime,
@@ -59,7 +59,7 @@ class Notification(BaseModel):
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) > arrow.utcnow()
 
     @staticmethod
-    def build_id(event: Event, content_id: int) -> str:
+    def build_id(event: PublicEvent, content_id: int) -> str:
         """
         Build the ID for a notification.
 

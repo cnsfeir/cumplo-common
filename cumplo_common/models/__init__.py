@@ -12,7 +12,8 @@ from .credentials import Credentials
 from .credit import CreditType
 from .currency import Currency
 from .debtor import Debtor
-from .event import Event
+from .event_private import PrivateEvent
+from .event_public import PublicEvent
 from .filter_configuration import FilterConfiguration
 from .funding_request import FundingRequest
 from .investment import Investment
@@ -23,7 +24,6 @@ from .user import User
 from .utils import StrEnum
 
 __all__ = [
-    "CHANNEL_CONFIGURATION_BY_TYPE",
     "BaseModel",
     "Borrower",
     "ChannelConfiguration",
@@ -32,13 +32,14 @@ __all__ = [
     "CreditType",
     "Currency",
     "Debtor",
-    "Event",
     "FilterConfiguration",
     "FundingRequest",
     "IFTTTConfiguration",
     "Investment",
     "Movement",
     "Notification",
+    "PrivateEvent",
+    "PublicEvent",
     "Simulation",
     "StrEnum",
     "User",

@@ -9,9 +9,10 @@ from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
 from .base_model import BaseModel
 from .channel import ChannelConfigurationType
 from .credentials import Credentials
-from .event import Event, EventModel
+from .event_public import PublicEvent
 from .filter_configuration import FilterConfiguration
 from .notification import Notification
+from .utils import EventModel
 
 
 class User(BaseModel):
@@ -32,7 +33,7 @@ class User(BaseModel):
         """Format the ID field as an ULID object."""
         return ulid.parse(value)
 
-    def already_notified(self, event: Event, content: EventModel) -> bool:
+    def already_notified(self, event: PublicEvent, content: EventModel) -> bool:
         """
         Check if the given user has already been notified with the given event and content.
 
