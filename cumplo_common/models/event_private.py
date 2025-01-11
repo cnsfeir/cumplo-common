@@ -1,32 +1,22 @@
-from typing import Self
+from cumplo_common.models.funding_request import FundingRequest
+from cumplo_common.models.investment import Investment
+from cumplo_common.models.movement import Movement
+from cumplo_common.models.user import User
 
-from pydantic import BaseModel
-
-from .funding_request import FundingRequest
-from .investment import Investment
-from .movement import Movement
-from .utils import StrEnum
+from .utils import Event
 
 
-class EventModel(BaseModel):
-    id: int
+class PrivateEvent(Event):
+    """Events that can only be consumed internally."""
 
-
-class Event(StrEnum):
-    _name_: str
-    model: type[EventModel]
-    is_recurring: bool
-
-    def __new__(cls, value: str, model: type[EventModel], is_recurring: bool = False) -> Self:  # noqa: FBT001, FBT002
-        """Create a new instance of the Enum with the given value and model."""
-        obj = str.__new__(cls, value)
-        obj.is_recurring = is_recurring
-        obj._value_ = value
-        obj.model = model
-        return obj
-
+    # Events
     FUNDING_REQUEST_AVAILABLE = "funding_request.available", FundingRequest
     FUNDING_REQUEST_PROMISING = "funding_request.promising", FundingRequest, True
+
+    USER_NOTIFICATIONS_UPDATED = "user.notifications.updated", User
+    USER_CREDENTIALS_UPDATED = "user.credentials.updated", User
+    USER_CHANNELS_UPDATED = "user.channels.updated", User
+    USER_FILTERS_UPDATED = "user.filters.updated", User
 
     INVESTMENT_INITIALIZED = "investment.initialized", Investment
     INVESTMENT_SUBMITTED = "investment.submitted", Investment
@@ -48,3 +38,6 @@ class Event(StrEnum):
     MOVEMENT_FEE_CHARGE = "movement.fee_charge", Movement
     MOVEMENT_FEE_REFUND = "movement.fee_refund", Movement
     MOVEMENT_RETURN = "movement.return", Movement
+
+    # Commands
+    FUNDING_REQUEST_FILTER = "funding_request.filter", FundingRequest

@@ -2,6 +2,8 @@ import enum
 from collections.abc import Generator
 from typing import Self
 
+from pydantic import BaseModel
+
 
 class StrEnum(enum.StrEnum):
     @classmethod
@@ -28,3 +30,21 @@ class StrEnum(enum.StrEnum):
 
         """
         yield from cls
+
+
+class EventModel(BaseModel):
+    id: int
+
+
+class Event(StrEnum):
+    _name_: str
+    model: type[EventModel]
+    is_recurring: bool
+
+    def __new__(cls, value: str, model: type[EventModel], is_recurring: bool = False) -> Self:  # noqa: FBT001, FBT002
+        """Create a new instance of the Enum with the given value and model."""
+        obj = str.__new__(cls, value)
+        obj.is_recurring = is_recurring
+        obj._value_ = value
+        obj.model = model
+        return obj

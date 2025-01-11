@@ -4,13 +4,13 @@ import arrow
 import pytest
 from pydantic import ValidationError
 
-from cumplo_common.models import Event, Notification
+from cumplo_common.models import Notification, PublicEvent
 
 
 class TestNotification:
     def test_build_id(self) -> None:
         """Should build the ID correctly."""
-        for event in Event.members():
+        for event in PublicEvent.members():
             content_id = random.randint(1, 1000)  # noqa: S311
             id_ = Notification.build_id(event, content_id)
             assert id_ == f"{event.value}-{content_id}"

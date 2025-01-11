@@ -10,7 +10,7 @@ from pydantic import Field, field_validator, model_validator
 from cumplo_common.utils.constants import PHONE_NUMBER_REGEX
 
 from .base_model import BaseModel
-from .event import Event
+from .event_public import PublicEvent
 from .utils import StrEnum
 
 ALL_EVENTS = "all"
@@ -29,8 +29,8 @@ class ChannelConfiguration(BaseModel, ABC):
     id: ulid.ULID = Field(...)
     enabled: bool = Field(True)
     type_: ChannelType = Field(...)
-    enabled_events: set[Event] | ALL_EVENTS_TYPE = Field(ALL_EVENTS)
-    disabled_events: set[Event] = Field(default_factory=set)
+    enabled_events: set[PublicEvent] | ALL_EVENTS_TYPE = Field(ALL_EVENTS)
+    disabled_events: set[PublicEvent] = Field(default_factory=set)
 
     @field_validator("id", mode="before")
     @classmethod
@@ -49,7 +49,7 @@ class ChannelConfiguration(BaseModel, ABC):
 
         return self
 
-    def event_enabled(self, event: Event) -> bool:
+    def event_enabled(self, event: PublicEvent) -> bool:
         """Check if the event is enabled."""
         if self.enabled_events == ALL_EVENTS and event not in self.disabled_events:
             return True
@@ -92,7 +92,7 @@ class WhatsappConfiguration(ChannelConfiguration):
 
 
 class WebhookConfiguration(ChannelConfiguration):
-    enabled_events: set[Event] | ALL_EVENTS_TYPE = Field(default_factory=set)
+    enabled_events: set[PublicEvent] | ALL_EVENTS_TYPE = Field(default_factory=set)
     type_: Literal[ChannelType.WEBHOOK] = ChannelType.WEBHOOK
     url: str = Field(..., max_length=2000)
 
