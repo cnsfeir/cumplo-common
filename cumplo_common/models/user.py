@@ -31,7 +31,7 @@ class User(BaseModel):
     @classmethod
     def _format_id(cls, value: str) -> ulid.ULID:
         """Format the ID field as an ULID object."""
-        return ulid.parse(value)
+        return value if isinstance(value, ulid.ULID) else ulid.parse(value)
 
     def already_notified(self, event: PublicEvent, content: EventModel) -> bool:
         """
