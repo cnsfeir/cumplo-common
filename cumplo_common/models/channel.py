@@ -119,10 +119,10 @@ class WebhookConfiguration(ChannelConfiguration):
         return value
 
 
-CHANNEL_CONFIGURATION_BY_TYPE: dict[ChannelType, type[ChannelConfiguration]] = {
+ChannelConfigurationType = IFTTTConfiguration | WhatsappConfiguration | WebhookConfiguration
+
+CHANNEL_CONFIGURATION_BY_TYPE: dict[ChannelType, type[ChannelConfigurationType]] = {
     ChannelType.WHATSAPP: WhatsappConfiguration,
     ChannelType.WEBHOOK: WebhookConfiguration,
     ChannelType.IFTTT: IFTTTConfiguration,
 }
-
-ChannelConfigurationType = IFTTTConfiguration | WhatsappConfiguration | WebhookConfiguration

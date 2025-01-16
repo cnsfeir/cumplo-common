@@ -1,12 +1,20 @@
 from collections.abc import Generator
 from logging import getLogger
+from typing import Any
 
 from cachetools import cached
 from google.cloud.firestore_v1 import Client as FirestoreClient
+from google.cloud.firestore_v1 import CollectionReference
 
 from cumplo_common.models import User
 from cumplo_common.utils.cache import Cache
-from cumplo_common.utils.constants import CACHE_MAXSIZE, KEYS_COLLECTION, USERS_CACHE_TTL, USERS_COLLECTION
+from cumplo_common.utils.constants import (
+    CACHE_MAXSIZE,
+    DISABLED_COLLECTION,
+    KEYS_COLLECTION,
+    USERS_CACHE_TTL,
+    USERS_COLLECTION,
+)
 from cumplo_common.utils.text import secure_key
 
 logger = getLogger(__name__)
@@ -14,6 +22,10 @@ cache = Cache(maxsize=CACHE_MAXSIZE, ttl=USERS_CACHE_TTL)
 
 
 class UserCollection:
+    collection: CollectionReference
+    keys: CollectionReference
+    client: FirestoreClient
+
     def __init__(self, client: FirestoreClient) -> None:
         self.collection = client.collection(USERS_COLLECTION)
         self.keys = client.collection(KEYS_COLLECTION)
@@ -22,7 +34,7 @@ class UserCollection:
     @cached(cache=cache)
     def get(self, id_user: str | None = None, api_key: str | None = None) -> User:
         """
-        Get a user document.
+        Get a user.
 
         Args:
             id_user (str): The user ID
@@ -56,9 +68,9 @@ class UserCollection:
         return User(id=user.id, **data)
 
     @cached(cache=cache)
-    def get_all(self) -> Generator[User, None, None]:
+    def list(self) -> Generator[User, None, None]:
         """
-        Get all the users data.
+        List all users.
 
         Yields:
             Generator[User, None, None]: Iterable of User objects
@@ -69,9 +81,21 @@ class UserCollection:
             if data := user.to_dict():
                 yield User(id=user.id, **data)
 
+    def create(self, user: User) -> None:
+        """
+        Create a user.
+
+        Args:
+            user (User): The user to be created
+
+        """
+        logger.info(f"Creating user {user.id} into Firestore")
+        self.collection.document(str(user.id)).set(user.json(exclude={"id"}))
+        self.keys.document(user.api_key).set({"id_user": user.id})
+
     def put(self, user: User) -> None:
         """
-        Create or updates a user document.
+        Create or updates a user.
 
         Args:
             user (User): The new user data to be upserted
@@ -83,7 +107,7 @@ class UserCollection:
 
     def delete(self, id_user: str) -> None:
         """
-        Delete a user document.
+        Delete a user.
 
         Args:
             id_user (str): The user ID to be deleted
@@ -92,3 +116,9 @@ class UserCollection:
         logger.info(f"Deleting user {id_user} from Firestore")
         document = self.collection.document(id_user)
         document.delete()
+
+
+class DisabledCollection(UserCollection):
+    def __init__(self, client: FirestoreClient, *args: Any, **kwargs: Any) -> None:
+        super().__init__(client, *args, **kwargs)
+        self.collection = client.collection(DISABLED_COLLECTION)

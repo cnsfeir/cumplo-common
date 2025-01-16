@@ -17,6 +17,7 @@ class PrivateEvent(Event):
     USER_CREDENTIALS_UPDATED = "user.credentials.updated", User
     USER_CHANNELS_UPDATED = "user.channels.updated", User
     USER_FILTERS_UPDATED = "user.filters.updated", User
+    USER_DELETED = "user.deleted", User
 
     INVESTMENT_INITIALIZED = "investment.initialized", Investment
     INVESTMENT_SUBMITTED = "investment.submitted", Investment

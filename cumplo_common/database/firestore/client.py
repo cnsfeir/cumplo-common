@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore, initialize_app
 
 from cumplo_common.utils.constants import PROJECT_ID
 
-from .users import UserCollection
+from .users import DisabledCollection, UserCollection
 
 
 class Client:
@@ -12,6 +12,7 @@ class Client:
     _initialized: bool = False
 
     users: UserCollection
+    disabled: DisabledCollection
     client: firestore.Client
 
     def __new__(cls) -> Self:
@@ -25,6 +26,7 @@ class Client:
             initialize_app(credential=credentials.ApplicationDefault(), options={"projectId": PROJECT_ID})
             self.client = firestore.client()
             self.users = UserCollection(self.client)
+            self.disabled = DisabledCollection(self.client)
             self._initialized = True
 
 
