@@ -29,3 +29,6 @@ PHONE_NUMBER_REGEX = r"^\+[1-9]\d{1,14}$"
 # Cache
 CACHE_MAXSIZE = int(os.getenv("CACHE_MAXSIZE", "1000"))
 USERS_CACHE_TTL = int(os.getenv("USERS_CACHE_TTL", "600"))
+
+# Encryption
+PASSWORDS_ENCRYPTION_KEY: str = os.getenv("PASSWORDS_ENCRYPTION_KEY", "")

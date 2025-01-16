@@ -20,7 +20,7 @@ class User(BaseModel):
     api_key: str = Field(...)
     is_admin: bool = Field(False)
     name: str = Field(..., max_length=30)
-    credentials: Credentials = Field(...)
+    credentials: Credentials | None = Field(None)
     expiration_minutes: PositiveInt = Field(DEFAULT_EXPIRATION_MINUTES)
 
     notifications: dict[str, Notification] = Field(default_factory=dict)
