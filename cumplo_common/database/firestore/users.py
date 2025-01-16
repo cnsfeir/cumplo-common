@@ -91,7 +91,7 @@ class UserCollection:
         """
         logger.info(f"Creating user {user.id} into Firestore")
         self.collection.document(str(user.id)).set(user.json(exclude={"id"}))
-        self.keys.document(user.api_key).set({"id_user": user.id})
+        self.keys.document(user.api_key).set({"id_user": str(user.id)})
 
     def put(self, user: User) -> None:
         """
