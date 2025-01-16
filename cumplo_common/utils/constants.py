@@ -12,11 +12,9 @@ IS_TESTING = bool(os.getenv("IS_TESTING"))
 SERVICE_ACCOUNT_EMAIL: str = os.getenv("SERVICE_ACCOUNT_EMAIL", "")
 
 # Firestore Collections
-CHANNELS_COLLECTION: str = os.getenv("CHANNELS_COLLECTION", "channels")
-FILTERS_COLLECTION: str = os.getenv("FILTERS_COLLECTION", "filters")
-NOTIFICATIONS_COLLECTION: str = os.getenv("NOTIFICATIONS_COLLECTION", "notifications")
-USERS_COLLECTION: str = os.getenv("USERS_COLLECTION", "users")
 KEYS_COLLECTION: str = os.getenv("KEYS_COLLECTION", "keys")
+USERS_COLLECTION: str = os.getenv("USERS_COLLECTION", "users")
+DISABLED_COLLECTION: str = os.getenv("DISABLED_COLLECTION", "disabled")
 
 # Cumplo
 CUMPLO_BASE_URL: str = os.getenv("CUMPLO_BASE_URL", "")
