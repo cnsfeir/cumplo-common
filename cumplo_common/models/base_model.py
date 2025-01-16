@@ -17,7 +17,6 @@ class BaseModel(pydantic.BaseModel, ABC):
         validate_assignment=True,
         validate_default=True,
         extra="forbid",
-        frozen=True,
     )
 
     def __hash__(self) -> int:
