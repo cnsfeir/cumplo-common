@@ -2,7 +2,7 @@ import re
 from typing import Any
 
 from cryptography.fernet import Fernet
-from pydantic import Field, computed_field, field_validator
+from pydantic import Field, field_validator
 
 from cumplo_common.utils.constants import PASSWORDS_ENCRYPTION_KEY
 
@@ -14,7 +14,7 @@ class Credentials(BaseModel):
     password: str = Field()
     cumplo_id: str = Field(...)
 
-    @computed_field
+    @property
     def decrypted_password(self) -> str:
         """Decrypt the password."""
         cipher_suite = Fernet(PASSWORDS_ENCRYPTION_KEY)
