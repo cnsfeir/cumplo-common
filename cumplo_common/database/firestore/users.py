@@ -2,23 +2,14 @@ from collections.abc import Generator
 from logging import getLogger
 from typing import Any
 
-from cachetools import cached
 from google.cloud.firestore_v1 import Client as FirestoreClient
 from google.cloud.firestore_v1 import CollectionReference
 
 from cumplo_common.models import User
-from cumplo_common.utils.cache import Cache
-from cumplo_common.utils.constants import (
-    CACHE_MAXSIZE,
-    DISABLED_COLLECTION,
-    KEYS_COLLECTION,
-    USERS_CACHE_TTL,
-    USERS_COLLECTION,
-)
+from cumplo_common.utils.constants import DISABLED_COLLECTION, KEYS_COLLECTION, USERS_COLLECTION
 from cumplo_common.utils.text import secure_key
 
 logger = getLogger(__name__)
-cache = Cache(maxsize=CACHE_MAXSIZE, ttl=USERS_CACHE_TTL)
 
 
 class UserCollection:
@@ -31,7 +22,6 @@ class UserCollection:
         self.keys = client.collection(KEYS_COLLECTION)
         self.client = client
 
-    @cached(cache=cache)
     def get(self, id_user: str | None = None, api_key: str | None = None) -> User:
         """
         Get a user.
@@ -67,7 +57,6 @@ class UserCollection:
 
         return User(id=user.id, **data)
 
-    @cached(cache=cache)
     def list(self) -> Generator[User, None, None]:
         """
         List all users.
