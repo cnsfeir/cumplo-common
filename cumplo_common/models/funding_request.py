@@ -35,7 +35,6 @@ class FundingRequest(BaseModel):
     amount: int = Field(...)
     irr: Decimal = Field(...)
     score: Decimal = Field(...)
-    installments: int = Field(...)
     due_date: str = Field(...)
     raised_amount: int = Field(...)
     maximum_investment: int = Field(...)
@@ -49,6 +48,12 @@ class FundingRequest(BaseModel):
     duration: Duration = Field(...)
     borrower: Borrower = Field(...)
     currency: Currency = Field(...)
+
+    @computed_field
+    @cached_property
+    def installments(self) -> int:
+        """Calculates the number of installments for the funding request."""
+        return self.simulation.installments
 
     @computed_field
     @cached_property
