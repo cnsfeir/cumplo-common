@@ -25,3 +25,8 @@ publish:
 login:
 	@gcloud config configurations activate $(PROJECT_ID)
 	@gcloud auth application-default login
+
+.PHONY: unit
+unit:
+	@set -o allexport; source .env; set +o allexport
+	@pytest tests/unit

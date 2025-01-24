@@ -25,6 +25,12 @@ class Simulation(BaseModel):
 
     @computed_field
     @cached_property
+    def installments(self) -> int:
+        """Returns the number of installments for the simulation."""
+        return len(self.payment_schedule)
+
+    @computed_field
+    @cached_property
     def investment(self) -> int:
         """Returns the investment of the simulation."""
         return SIMULATION_AMOUNT + self.cumplo_points

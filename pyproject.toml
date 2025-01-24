@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cumplo-common"
-version = "1.4.9"
+version = "1.5.1"
 description = "A one-stop library that centralizes the core logic and protects the domain of the Cumplo API project"
 authors = ["Cristobal Sfeir <hello@crisotbalsfeir.com>"]
 packages = [{ include = "cumplo_common" }]
@@ -81,6 +81,9 @@ ignore = [
     "ISC001", # Implicit string concatenation
     "CPY001", # Copying notice
     "B019",   # LRU cache can generate memory leaks (when used without a maxsize)
+    "TD003",  # Missing issue link on the line following a TODO
+    "TD002",  # Missing author in TODO
+    "FIX002",  # Line contains TODO, consider resolving the issue
     # =====
     "PT011",  # ValueError is too broad, set the `match` parameter
     "PT013",  # Incorrect import of `pytest`; use `import pytest` instead
