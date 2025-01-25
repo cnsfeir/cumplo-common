@@ -31,8 +31,8 @@ class Portfolio(BaseModel):
     on_time: PortfolioUnit = Field(...)
     delinquent: PortfolioUnit = Field(...)
 
+    @computed_field  # type: ignore[misc]
     @cached_property
-    @computed_field
     def total(self) -> PortfolioUnit:
         """Total is the sum of outstanding and paid."""
         return PortfolioUnit(
@@ -41,8 +41,8 @@ class Portfolio(BaseModel):
             count=self.outstanding.count + self.paid.count,
         )
 
+    @computed_field  # type: ignore[misc]
     @cached_property
-    @computed_field
     def outstanding(self) -> PortfolioUnit:
         """Outstanding is the sum of active, overdue and delinquent."""
         return PortfolioUnit(
@@ -51,8 +51,8 @@ class Portfolio(BaseModel):
             count=self.active.count + self.overdue.count + self.delinquent.count,
         )
 
+    @computed_field  # type: ignore[misc]
     @cached_property
-    @computed_field
     def paid(self) -> PortfolioUnit:
         """Paid is the sum of credits paid on time and cured."""
         return PortfolioUnit(
