@@ -10,7 +10,7 @@ from .portfolio import Portfolio
 class Debtor(BaseModel):
     share: Decimal = Field(...)
     name: str | None = Field(None)
-    sector: str | None = Field(None)
+    economic_sector: str | None = Field(None)
     portfolio: Portfolio = Field(...)
     description: str | None = Field(None)
     first_appearance: datetime = Field(...)
