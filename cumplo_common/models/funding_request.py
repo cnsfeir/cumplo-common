@@ -4,7 +4,7 @@ from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.utils.constants import CUMPLO_BASE_URL
+from cumplo_common.utils.constants import CUMPLO_BASE_URL, SIMULATION_AMOUNT
 
 from .base_model import BaseModel
 from .borrower import Borrower
@@ -94,3 +94,15 @@ class FundingRequest(BaseModel):
 
         """
         return ceil(self.monthly_profit_rate * amount)
+
+    @computed_field  # type: ignore[misc]
+    @cached_property
+    def upfront_fee(self) -> Decimal:
+        """Calculates the upfront fee for the funding request."""
+        return round(Decimal(self.simulation.upfront_fee / SIMULATION_AMOUNT), 4)
+
+    @computed_field  # type: ignore[misc]
+    @cached_property
+    def exit_fee(self) -> Decimal:
+        """Calculates the exit fee for the funding request."""
+        return round(Decimal(self.simulation.exit_fee / SIMULATION_AMOUNT), 4)
