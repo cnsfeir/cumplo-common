@@ -23,20 +23,20 @@ class Simulation(BaseModel):
     cumplo_points: int = Field(...)
     payment_schedule: list[SimulationInstallment] = Field(default_factory=list)
 
-    @computed_field
     @cached_property
+    @computed_field
     def installments(self) -> int:
         """Returns the number of installments for the simulation."""
         return len(self.payment_schedule)
 
-    @computed_field
     @cached_property
+    @computed_field
     def investment(self) -> int:
         """Returns the investment of the simulation."""
         return SIMULATION_AMOUNT + self.cumplo_points
 
-    @computed_field
     @cached_property
+    @computed_field
     def cash_flows(self) -> list[int]:
         """Returns the cash flows of the simulation."""
         installments = [
