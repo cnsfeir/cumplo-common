@@ -15,10 +15,11 @@ from .debtor import Debtor
 from .event_private import PrivateEvent
 from .event_public import PublicEvent
 from .filter_configuration import FilterConfiguration
-from .funding_request import FundingRequest
+from .funding_request import DurationUnit, FundingRequest
 from .investment import Investment
 from .movement import Movement
 from .notification import Notification
+from .portfolio import Portfolio, PortfolioStatus
 from .simulation import Simulation
 from .user import User
 from .utils import StrEnum
@@ -32,12 +33,15 @@ __all__ = [
     "CreditType",
     "Currency",
     "Debtor",
+    "DurationUnit",
     "FilterConfiguration",
     "FundingRequest",
     "IFTTTConfiguration",
     "Investment",
     "Movement",
     "Notification",
+    "Portfolio",
+    "PortfolioStatus",
     "PrivateEvent",
     "PublicEvent",
     "Simulation",

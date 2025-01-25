@@ -1,12 +1,10 @@
-# mypy: disable-error-code="misc, override"
-
 from decimal import Decimal
 from functools import cached_property
 from math import ceil
 
 from pydantic import Field, computed_field
 
-from cumplo_common.utils.constants import CUMPLO_BASE_URL
+from cumplo_common.utils.constants import CUMPLO_BASE_URL, SIMULATION_AMOUNT
 
 from .base_model import BaseModel
 from .borrower import Borrower
@@ -49,13 +47,13 @@ class FundingRequest(BaseModel):
     borrower: Borrower = Field(...)
     currency: Currency = Field(...)
 
-    @computed_field
+    @computed_field  # type: ignore[misc]
     @cached_property
     def installments(self) -> int:
         """Calculates the number of installments for the funding request."""
-        return self.simulation.installments
+        return len(self.simulation.installments)
 
-    @computed_field
+    @computed_field  # type: ignore[misc]
     @cached_property
     def profit_rate(self) -> Decimal:
         """Calculates the profit rate for the funding request."""
@@ -65,20 +63,20 @@ class FundingRequest(BaseModel):
             value = (1 + self.irr / 100) ** Decimal(self.duration.value / 365) - 1
         return round(Decimal(value), ndigits=4)
 
-    @computed_field
+    @computed_field  # type: ignore[misc]
     @cached_property
     def monthly_profit_rate(self) -> Decimal:
         """Calculates the monthly profit rate for the funding request."""
         value = (1 + self.irr / 100) ** Decimal(1 / 12) - 1
         return round(Decimal(value), ndigits=4)
 
-    @computed_field
+    @computed_field  # type: ignore[misc]
     @cached_property
     def is_completed(self) -> bool:
         """Checks if the funding request is fully funded."""
         return self.raised_percentage == Decimal(1)
 
-    @computed_field
+    @computed_field  # type: ignore[misc]
     @cached_property
     def url(self) -> str:
         """Builds the URL for the funding request."""
@@ -96,3 +94,15 @@ class FundingRequest(BaseModel):
 
         """
         return ceil(self.monthly_profit_rate * amount)
+
+    @computed_field  # type: ignore[misc]
+    @cached_property
+    def upfront_fee(self) -> Decimal:
+        """Calculates the upfront fee for the funding request."""
+        return round(Decimal(self.simulation.upfront_fee / SIMULATION_AMOUNT), 4)
+
+    @computed_field  # type: ignore[misc]
+    @cached_property
+    def exit_fee(self) -> Decimal:
+        """Calculates the exit fee for the funding request."""
+        return round(Decimal(self.simulation.exit_fee / SIMULATION_AMOUNT), 4)
