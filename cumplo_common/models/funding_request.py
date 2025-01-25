@@ -51,7 +51,7 @@ class FundingRequest(BaseModel):
     @cached_property
     def installments(self) -> int:
         """Calculates the number of installments for the funding request."""
-        return self.simulation.installments
+        return len(self.simulation.installments)
 
     @computed_field  # type: ignore[misc]
     @cached_property
