@@ -1,35 +1,46 @@
-# mypy: disable-error-code="call-overload"
-
 from decimal import Decimal
 from json import loads
-from typing import Any
+from typing import Any, Self
 
 import ulid
-from pydantic import Field, PositiveInt, field_validator
+from pydantic import Field, PositiveInt, field_validator, model_validator
 
 from .base_model import BaseModel
 from .credit import CreditType
+from .portfolio import PortfolioCategory, PortfolioCategoryUnit
 
 
-class DebtorFilterConfiguration(BaseModel):
-    ignore_dicom: bool = Field(False)
-    minimum_requested_credits: PositiveInt | None = Field(None)
-    minimum_paid_in_time_percentage: Decimal | None = Field(None, ge=0, le=1)
+class PortfolioFilterConfiguration(BaseModel):
+    """Filter configuration for a specific portfolio status and data unit."""
 
+    unit: PortfolioCategoryUnit = Field(...)
+    category: PortfolioCategory = Field(...)
+    minimum: Decimal | None = Field(None, ge=0)
+    maximum: Decimal | None = Field(None, ge=0)
+    percentage_base: PortfolioCategory = Field(PortfolioCategory.TOTAL)
+    percentage_unit: PortfolioCategoryUnit = Field(PortfolioCategoryUnit.COUNT)
 
-class BorrowerFilterConfiguration(BaseModel):
-    ignore_dicom: bool = Field(False)
-    minimum_requested_amount: PositiveInt | None = Field(None)
-    minimum_requested_credits: PositiveInt | None = Field(None)
-    maximum_average_days_delinquent: PositiveInt | None = Field(None)
-    minimum_paid_in_time_percentage: Decimal | None = Field(None, ge=0, le=1)
+    @model_validator(mode="after")
+    def _validate_bounds(self) -> Self:
+        """Validate that minimum and maximum values are within valid bounds."""
+        if self.unit == PortfolioCategoryUnit.PERCENTAGE:
+            if self.minimum is not None and self.minimum > 1:
+                raise ValueError("Minimum percentage must be less than or equal to 1")
+            if self.maximum is not None and self.maximum > 1:
+                raise ValueError("Maximum percentage must be less than or equal to 1")
+
+        if self.minimum is not None and self.maximum is not None and self.maximum <= self.minimum:
+            raise ValueError("Maximum value must be greater than minimum value")
+
+        return self
 
 
 class FilterConfiguration(BaseModel):
-    """Configuration settings for filtering funding requests to determine promising investment opportunities."""
+    """Configuration settings for filtering funding requests."""
 
     id: ulid.ULID = Field(...)
     name: str | None = Field(None)
+    minimum_amount: PositiveInt | None = Field(None)
     minimum_score: Decimal | None = Field(None, ge=0, le=1)
     target_credit_types: list[CreditType] | None = Field(None)
 
@@ -40,8 +51,9 @@ class FilterConfiguration(BaseModel):
     minimum_irr: Decimal | None = Field(None, ge=0)
     minimum_monthly_profit_rate: Decimal | None = Field(None, ge=0)
 
-    debtor: DebtorFilterConfiguration | None = Field(None)
-    borrower: BorrowerFilterConfiguration | None = Field(None)
+    ignore_dicom: bool = Field(False)
+    maximum_debtors: PositiveInt | None = Field(None)
+    portfolio: list[PortfolioFilterConfiguration] = Field(default_factory=list)
 
     @field_validator("id", mode="before")
     @classmethod
@@ -57,7 +69,8 @@ class FilterConfiguration(BaseModel):
         """
         Return the model as a JSON parsed dict.
 
-        Returns:     dict: JSON parsed dict representation of the model
+        Returns:
+            dict: JSON parsed dict representation of the model
 
         """
         return loads(self.model_dump_json(*args, **kwargs, exclude_defaults=True))

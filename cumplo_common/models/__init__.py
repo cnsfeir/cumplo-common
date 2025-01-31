@@ -19,7 +19,7 @@ from .funding_request import DurationUnit, FundingRequest
 from .investment import Investment
 from .movement import Movement
 from .notification import Notification
-from .portfolio import Portfolio, PortfolioStatus
+from .portfolio import Portfolio, PortfolioCategory
 from .simulation import Simulation
 from .user import User
 from .utils import StrEnum
@@ -41,7 +41,7 @@ __all__ = [
     "Movement",
     "Notification",
     "Portfolio",
-    "PortfolioStatus",
+    "PortfolioCategory",
     "PrivateEvent",
     "PublicEvent",
     "Simulation",
