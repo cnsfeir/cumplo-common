@@ -1,7 +1,6 @@
 import ipaddress
-import re
 from abc import ABC
-from typing import Literal, Self
+from typing import Any, Literal, Self
 from urllib.parse import urlparse
 
 import ulid
@@ -37,6 +36,12 @@ class ChannelConfiguration(BaseModel, ABC):
     def _format_id(cls, value: ulid.default.api.ULIDPrimitive) -> ulid.ULID:
         """Format the ID field as an ULID object."""
         return ulid.parse(value)
+
+    @field_validator("enabled_events", mode="before")
+    @classmethod
+    def _format_enabled_all_events(cls, value: Any) -> Any:
+        """Format the enabled_events field to handle the special 'all' value."""
+        return ALL_EVENTS if ALL_EVENTS in value else value
 
     @model_validator(mode="after")
     def _validate_events_lists(self) -> Self:
@@ -80,15 +85,7 @@ class IFTTTConfiguration(ChannelConfiguration):
 
 class WhatsappConfiguration(ChannelConfiguration):
     type_: Literal[ChannelType.WHATSAPP] = ChannelType.WHATSAPP
-    phone_number: str = Field(...)
-
-    @field_validator("phone_number", mode="before")
-    @classmethod
-    def _validate_phone_number(cls, value: str) -> str:
-        """Validate the phone number conforms to the E.164 format."""
-        if not re.match(PHONE_NUMBER_REGEX, value):
-            raise ValueError("Invalid phone number format")
-        return value
+    phone_number: str = Field(pattern=PHONE_NUMBER_REGEX)
 
 
 class WebhookConfiguration(ChannelConfiguration):
