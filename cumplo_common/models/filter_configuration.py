@@ -18,7 +18,7 @@ class PortfolioFilterConfiguration(BaseModel):
     minimum: Decimal | None = Field(None, ge=0)
     maximum: Decimal | None = Field(None, ge=0)
     percentage_base: PortfolioCategory = Field(PortfolioCategory.TOTAL)
-    percentage_unit: PortfolioCategoryUnit = Field(PortfolioCategoryUnit.COUNT)
+    percentage_unit: PortfolioCategoryUnit = Field(PortfolioCategoryUnit.AMOUNT)
 
     @model_validator(mode="after")
     def _validate_bounds(self) -> Self:
