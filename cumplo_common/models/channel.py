@@ -46,9 +46,6 @@ class ChannelConfiguration(BaseModel, ABC):
     @model_validator(mode="after")
     def _validate_events_lists(self) -> Self:
         """Validate the events lists."""
-        if not self.enabled_events and not self.disabled_events:
-            raise ValueError("At least one of enabled_events or disabled_events must not be empty")
-
         if self.disabled_events and self.enabled_events != ALL_EVENTS:
             raise ValueError("Can't use disabled_events when enabled_events is not 'all'")
 

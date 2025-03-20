@@ -53,4 +53,4 @@ class User(BaseModel):
         if not (notification := self.notifications.get(id_notification)):
             return False
 
-        return notification.has_expired
+        return not notification.has_expired
