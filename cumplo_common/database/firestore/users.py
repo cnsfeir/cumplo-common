@@ -82,6 +82,20 @@ class UserCollection:
         self.collection.document(str(user.id)).set(user.json(exclude={"id"}))
         self.keys.document(user.api_key).set({"id_user": str(user.id)})
 
+    def update(self, user: User, attribute: str) -> None:
+        """
+        Update a user's attribute.
+
+        Args:
+            user (User): The user to be updated
+            attribute (str): The attribute to be updated
+
+        """
+        logger.info(f"Updating user {user.id} {attribute} into Firestore")
+        data = user.json(exclude={"id"})
+        update = {attribute: data[attribute]}
+        self.collection.document(str(user.id)).update(update)
+
     def put(self, user: User) -> None:
         """
         Create or updates a user.
