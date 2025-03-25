@@ -33,9 +33,9 @@ class User(BaseModel):
         """Format the ID field as an ULID object."""
         return value if isinstance(value, ulid.ULID) else ulid.parse(value)
 
-    def already_notified(self, event: PublicEvent, content: EventModel) -> bool:
+    def should_notify(self, event: PublicEvent, content: EventModel) -> bool:
         """
-        Check if the given user has already been notified with the given event and content.
+        Check if the given user should be notified with the given event and content.
 
         Args:
             user (User): The user who's being notified
@@ -47,10 +47,10 @@ class User(BaseModel):
 
         """
         if not event.is_recurring:
-            return False
+            return True
 
         id_notification = Notification.build_id(event, content.id)
         if not (notification := self.notifications.get(id_notification)):
-            return False
+            return True
 
-        return not notification.has_expired
+        return notification.has_expired and not notification.dismissed

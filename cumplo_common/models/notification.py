@@ -17,6 +17,7 @@ class Notification(BaseModel):
     date: datetime = Field(...)
     content_id: int = Field(...)
     expiration_minutes: int = Field(DEFAULT_EXPIRATION_MINUTES)
+    dismissed: bool = Field(default=False)
 
     @model_validator(mode="before")
     @classmethod
