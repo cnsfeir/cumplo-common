@@ -10,17 +10,29 @@ PASSWORD = "mypassword123"  # noqa: S105
 class TestCredentials:
     def test_credentials_initialization(self) -> None:
         """Test basic initialization of Credentials."""
-        creds = Credentials(email="test@example.com", password=PASSWORD, cumplo_id="12345")
+        creds = Credentials(
+            email="test@example.com",
+            password=PASSWORD,
+            user_id="12345",
+            company_id="67890",
+            company_nin="1234567890",
+        )
 
         assert creds.email == "test@example.com"
-        assert creds.cumplo_id == "12345"
+        assert creds.user_id == "12345"
         # Password should be encrypted
         assert creds.password.startswith("gAAAAA")
 
     def test_password_encryption(self) -> None:
         """Test that password is properly encrypted."""
         original_password = PASSWORD
-        creds = Credentials(email="test@example.com", password=original_password, cumplo_id="12345")
+        creds = Credentials(
+            email="test@example.com",
+            password=original_password,
+            user_id="12345",
+            company_id="67890",
+            company_nin="1234567890",
+        )
 
         # Verify encryption happened
         assert creds.password != original_password
@@ -34,7 +46,13 @@ class TestCredentials:
     def test_password_decryption(self) -> None:
         """Test the decrypted_password computed field."""
         original_password = PASSWORD
-        creds = Credentials(email="test@example.com", password=original_password, cumplo_id="12345")
+        creds = Credentials(
+            email="test@example.com",
+            password=original_password,
+            user_id="12345",
+            company_id="67890",
+            company_nin="1234567890",
+        )
 
         assert creds.decrypted_password == original_password
 
@@ -42,11 +60,23 @@ class TestCredentials:
         """Test that an already encrypted password is not re-encrypted."""
         original_password = PASSWORD
         # First, create credentials to get an encrypted password
-        creds1 = Credentials(email="test@example.com", password=original_password, cumplo_id="12345")
+        creds1 = Credentials(
+            email="test@example.com",
+            password=original_password,
+            user_id="12345",
+            company_id="67890",
+            company_nin="1234567890",
+        )
         encrypted_password = creds1.password
 
         # Now create new credentials with the encrypted password
-        creds2 = Credentials(email="test@example.com", password=encrypted_password, cumplo_id="12345")
+        creds2 = Credentials(
+            email="test@example.com",
+            password=encrypted_password,
+            user_id="12345",
+            company_id="67890",
+            company_nin="1234567890",
+        )
 
         # Password should remain the same
         assert creds2.password == encrypted_password
@@ -55,10 +85,22 @@ class TestCredentials:
     def test_invalid_credentials(self) -> None:
         """Test that invalid credentials raise appropriate errors."""
         with pytest.raises(ValueError):
-            Credentials(email="not_an_email", password=PASSWORD, cumplo_id="12345")
+            Credentials(
+                email="not_an_email",
+                password=PASSWORD,
+                user_id="12345",
+                company_id="67890",
+                company_nin="1234567890",
+            )
 
         with pytest.raises(ValueError):
-            Credentials(email="test@example.com", password="", cumplo_id="12345")
+            Credentials(
+                email="test@example.com",
+                password="",
+                user_id="12345",
+                company_id="67890",
+                company_nin="1234567890",
+            )
 
     def test_valid_email_formats(self) -> None:
         """Test that various valid email formats are accepted."""
@@ -71,7 +113,13 @@ class TestCredentials:
             "user_name@domain.io",
         ]
         for email in valid_emails:
-            Credentials(email=email, password=PASSWORD, cumplo_id="12345")
+            Credentials(
+                email=email,
+                password=PASSWORD,
+                user_id="12345",
+                company_id="67890",
+                company_nin="1234567890",
+            )
 
     def test_invalid_email_formats(self) -> None:
         """Test that invalid email formats raise validation errors."""
@@ -88,4 +136,10 @@ class TestCredentials:
 
         for email in invalid_emails:
             with pytest.raises(ValueError):
-                Credentials(email=email, password=PASSWORD, cumplo_id="12345")
+                Credentials(
+                    email=email,
+                    password=PASSWORD,
+                    user_id="12345",
+                    company_id="67890",
+                    company_nin="1234567890",
+                )

@@ -12,7 +12,9 @@ from .base_model import BaseModel
 class Credentials(BaseModel):
     email: str = Field(pattern=r"^[\w\.\-\+]+@([\w\-]+\.)+[\w\-]{2,4}$")
     password: str = Field()
-    cumplo_id: str = Field(...)
+    user_id: str = Field(...)
+    company_id: str = Field(...)
+    company_nin: str = Field(...)
 
     @property
     def decrypted_password(self) -> str:

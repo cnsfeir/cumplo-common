@@ -47,16 +47,7 @@ class Notification(BaseModel):
 
     @property
     def has_expired(self) -> bool:
-        """
-        Check if the notification has expired.
-
-        Args:
-            expiration_minutes (int): Minutes until the notification expires
-
-        Returns:
-            bool: Whether the notification has expired or not
-
-        """
+        """Check if the notification has expired."""
         return arrow.get(self.date).shift(minutes=self.expiration_minutes) < arrow.utcnow()
 
     @staticmethod

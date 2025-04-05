@@ -1,18 +1,47 @@
 # mypy: disable-error-code="misc, call-overload"
 
 
+from datetime import UTC, datetime
+
+import arrow
 import ulid
 from pydantic import Field, PositiveInt, field_validator
 
-from cumplo_common.utils.constants import DEFAULT_EXPIRATION_MINUTES
+from cumplo_common.utils.constants import (
+    BALANCE_EXPIRATION_MINUTES,
+    DEFAULT_EXPIRATION_MINUTES,
+    INVESTMENT_EXPIRATION_MINUTES,
+)
 
 from .base_model import BaseModel
 from .channel import ChannelConfigurationType
 from .credentials import Credentials
 from .event_public import PublicEvent
 from .filter_configuration import FilterConfiguration
+from .investment import Investment
 from .notification import Notification
+from .session import Session
 from .utils import EventModel
+
+
+class Balance(BaseModel):
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    amount: int = Field()
+
+    @property
+    def has_expired(self) -> bool:
+        """Check if the balance has expired."""
+        return arrow.get(self.updated_at).shift(minutes=BALANCE_EXPIRATION_MINUTES) < arrow.utcnow()
+
+
+class InvestmentPortfolio(BaseModel):
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    investments: dict[int, Investment] = Field(default_factory=dict)
+
+    @property
+    def has_expired(self) -> bool:
+        """Check if the investment portfolio has expired."""
+        return arrow.get(self.updated_at).shift(minutes=INVESTMENT_EXPIRATION_MINUTES) < arrow.utcnow()
 
 
 class User(BaseModel):
@@ -26,6 +55,10 @@ class User(BaseModel):
     notifications: dict[str, Notification] = Field(default_factory=dict)
     filters: dict[str, FilterConfiguration] = Field(default_factory=dict)
     channels: dict[str, ChannelConfigurationType] = Field(default_factory=dict)
+
+    balance: Balance | None = Field(None)
+    portfolio: InvestmentPortfolio | None = Field(None)
+    session: Session | None = Field(None)
 
     @field_validator("id", mode="before")
     @classmethod
