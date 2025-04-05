@@ -10,7 +10,8 @@
     ],
     "editor.tabSize": 4,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit"
+        "source.organizeImports": "explicit",
+        "source.unusedImports": "always"
     },
     // Python
     "[python]": {

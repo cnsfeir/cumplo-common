@@ -20,11 +20,13 @@ from .investment import Investment
 from .movement import Movement
 from .notification import Notification
 from .portfolio import Portfolio, PortfolioCategory
+from .session import Session
 from .simulation import Simulation
-from .user import User
+from .user import Balance, InvestmentPortfolio, User
 from .utils import StrEnum
 
 __all__ = [
+    "Balance",
     "BaseModel",
     "Borrower",
     "ChannelConfiguration",
@@ -38,12 +40,14 @@ __all__ = [
     "FundingRequest",
     "IFTTTConfiguration",
     "Investment",
+    "InvestmentPortfolio",
     "Movement",
     "Notification",
     "Portfolio",
     "PortfolioCategory",
     "PrivateEvent",
     "PublicEvent",
+    "Session",
     "Simulation",
     "StrEnum",
     "User",
