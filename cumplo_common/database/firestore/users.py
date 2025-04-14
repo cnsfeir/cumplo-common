@@ -96,6 +96,20 @@ class UserCollection:
         update = {attribute: data[attribute]}
         self.collection.document(str(user.id)).update(update)
 
+    def update_notification(self, user: User, id_notification: str) -> None:
+        """
+        Update a specific user's notification.
+
+        Args:
+            user (User): The user to be updated
+            id_notification (str): The notification to be updated
+
+        """
+        logger.info(f"Updating user {user.id} notification {id_notification} into Firestore")
+        data = user.json(exclude={"id"})
+        update = {"notifications": {id_notification: data["notifications"][id_notification]}}
+        self.collection.document(str(user.id)).update(update)
+
     def put(self, user: User) -> None:
         """
         Create or updates a user.

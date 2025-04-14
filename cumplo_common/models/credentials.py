@@ -15,6 +15,7 @@ class Credentials(BaseModel):
     user_id: str = Field(...)
     company_id: str = Field(...)
     company_nin: str = Field(...)
+    valid: bool = Field(default=True)
 
     @property
     def decrypted_password(self) -> str:
