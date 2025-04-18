@@ -1,3 +1,4 @@
+import json
 import os
 
 from dotenv import load_dotenv
@@ -35,3 +36,8 @@ USERS_CACHE_TTL = int(os.getenv("USERS_CACHE_TTL", "600"))
 
 # Encryption
 PASSWORDS_ENCRYPTION_KEY: str = os.getenv("PASSWORDS_ENCRYPTION_KEY", "")
+
+# Gmail
+GMAIL_CREDENTIALS: dict[str, str] = json.loads(os.getenv("GMAIL_CREDENTIALS", "{}"))
+GMAIL_FROM_EMAIL: str = os.getenv("GMAIL_FROM_EMAIL", "")
+GMAIL_USER_ID: str = os.getenv("GMAIL_USER_ID", "me")
