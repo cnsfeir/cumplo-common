@@ -6,7 +6,7 @@ from google.cloud.firestore_v1 import Client as FirestoreClient
 from google.cloud.firestore_v1 import CollectionReference
 
 from cumplo_common.models import User
-from cumplo_common.utils.constants import DISABLED_COLLECTION, KEYS_COLLECTION, USERS_COLLECTION
+from cumplo_common.utils.constants import DISABLED_COLLECTION, EMAILS_COLLECTION, KEYS_COLLECTION, USERS_COLLECTION
 from cumplo_common.utils.text import secure_key
 
 logger = getLogger(__name__)
@@ -15,21 +15,43 @@ logger = getLogger(__name__)
 class UserCollection:
     collection: CollectionReference
     keys: CollectionReference
+    emails: CollectionReference
     client: FirestoreClient
 
     def __init__(self, client: FirestoreClient) -> None:
         self.collection = client.collection(USERS_COLLECTION)
+        self.emails = client.collection(EMAILS_COLLECTION)
         self.keys = client.collection(KEYS_COLLECTION)
         self.client = client
 
-    def get(self, id_user: str | None = None, api_key: str | None = None) -> User:
+    def _get_by_api_key(self, api_key: str) -> str:
+        """Get a user ID by his API key."""
+        logger.info(f"Getting user with API key {secure_key(api_key)} from Firestore")
+        key = self.keys.document(api_key).get()
+
+        if not key.exists or not (data := key.to_dict()):
+            raise KeyError(f"User with API key {secure_key(api_key)} does not exist")
+
+        return data["id_user"]
+
+    def _get_by_email(self, email: str) -> str:
+        """Get a user ID by his email."""
+        logger.info(f"Getting user with email {email} from Firestore")
+        email_doc = self.emails.document(email).get()
+
+        if not email_doc.exists or not (data := email_doc.to_dict()):
+            raise KeyError(f"User with email {email} does not exist")
+
+        return data["id_user"]
+
+    def get(self, id_user: str | None = None, api_key: str | None = None, email: str | None = None) -> User:
         """
         Get a user.
 
         Args:
             id_user (str): The user ID
             api_key (str): The API key
-
+            email (str): The email
         Raises:
             KeyError: When the user does not exist
             ValueError: When the user data is empty or the API key is not valid
@@ -38,20 +60,16 @@ class UserCollection:
             User: The user object containing the user data
 
         """
-        if not (id_user or api_key):
-            raise ValueError("Either ID or API key must be provided")
+        if not (id_user or api_key or email):
+            raise ValueError("Either ID, API key or email must be provided")
 
         if not id_user and api_key:
-            logger.info(f"Getting user with API key {secure_key(api_key)} from Firestore")
-            key = self.keys.document(api_key).get()
+            id_user = self._get_by_api_key(api_key)
 
-            if not key.exists or not (data := key.to_dict()):
-                raise KeyError(f"User with API key {secure_key(api_key)} does not exist")
-
-            id_user = data["id_user"]
+        if not id_user and email:
+            id_user = self._get_by_email(email)
 
         user = self.collection.document(id_user).get()
-
         if not user.exists or not (data := user.to_dict()):
             raise KeyError(f"User with ID {id_user} does not exist")
 
@@ -81,6 +99,7 @@ class UserCollection:
         logger.info(f"Creating user {user.id} into Firestore")
         self.collection.document(str(user.id)).set(user.json(exclude={"id"}))
         self.keys.document(user.api_key).set({"id_user": str(user.id)})
+        self.emails.document(user.email).set({"id_user": str(user.id)})
 
     def update(self, user: User, attribute: str) -> None:
         """
@@ -122,17 +141,18 @@ class UserCollection:
         document = self.collection.document(str(user.id))
         document.set(user.json(exclude={"id"}))
 
-    def delete(self, id_user: str) -> None:
+    def delete(self, user: User) -> None:
         """
         Delete a user.
 
         Args:
-            id_user (str): The user ID to be deleted
+            user (User): The user to be deleted
 
         """
-        logger.info(f"Deleting user {id_user} from Firestore")
-        document = self.collection.document(id_user)
-        document.delete()
+        logger.info(f"Deleting user {user.id} from Firestore")
+        self.keys.document(user.api_key).delete()
+        self.emails.document(user.email).delete()
+        self.collection.document(str(user.id)).delete()
 
 
 class DisabledCollection(UserCollection):
