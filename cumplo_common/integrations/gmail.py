@@ -58,6 +58,12 @@ class Gmail:
         return build(serviceName="gmail", version="v1", credentials=credentials)
 
     @classmethod
+    def _get_message(cls, service: build, message_id: str) -> Message:
+        """Get a message from Gmail."""
+        message = service.users().messages().get(userId=GMAIL_USER_ID, id=message_id).execute()
+        return Message(message)
+
+    @classmethod
     def subscribe(cls) -> dict:
         """Subscribe a PubSub topic to a Gmail label."""
         service = cls._authenticate()
@@ -85,8 +91,7 @@ class Gmail:
         response = service.users().messages().list(userId=GMAIL_USER_ID, labelIds=[GMAIL_LABEL]).execute()
 
         if messages := response.get("messages"):
-            message = service.users().messages().get(userId=GMAIL_USER_ID, id=messages[0]["id"]).execute()
-            return Message(message)
+            return cls._get_message(service=service, message_id=messages[0]["id"])
 
         logger.warning(f"No messages found in Gmail for label {GMAIL_LABEL}")
         return None
@@ -111,8 +116,7 @@ class Gmail:
         for history in reversed(response.get("history", [])):
             for message_added in history.get("messagesAdded", []):
                 if message_id := message_added.get("message", {}).get("id"):
-                    message = service.users().messages().get(userId=GMAIL_USER_ID, id=message_id).execute()
-                    return Message(message)
+                    return cls._get_message(service=service, message_id=message_id)
 
         logger.warning(f"No messages found in Gmail for label {GMAIL_LABEL} starting from history ID {history_id}")
         return None
@@ -168,10 +172,9 @@ class Gmail:
             return None
 
         for message_id in map(itemgetter("id"), messages):
-            message = service.users().messages().get(userId=GMAIL_USER_ID, id=message_id).execute()
-            real_sender = next(header["value"] for header in message["payload"]["headers"] if header["name"] == "From")
-            if sender in real_sender:
-                return Message(message)
+            message = cls._get_message(service=service, message_id=message_id)
+            if sender == message.sender:
+                return message
 
         logger.warning(f"No messages found in Gmail for sender {sender}")
         return None
