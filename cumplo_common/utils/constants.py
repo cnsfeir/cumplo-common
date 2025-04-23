@@ -15,8 +15,8 @@ SERVICE_ACCOUNT_EMAIL: str = os.getenv("SERVICE_ACCOUNT_EMAIL", "")
 # Firestore Collections
 KEYS_COLLECTION: str = os.getenv("KEYS_COLLECTION", "keys")
 USERS_COLLECTION: str = os.getenv("USERS_COLLECTION", "users")
+EMAILS_COLLECTION: str = os.getenv("EMAILS_COLLECTION", "emails")
 DISABLED_COLLECTION: str = os.getenv("DISABLED_COLLECTION", "disabled")
-
 # Cumplo
 CUMPLO_BASE_URL: str = os.getenv("CUMPLO_BASE_URL", "")
 SIMULATION_AMOUNT = int(os.getenv("SIMULATION_AMOUNT", "1000000"))

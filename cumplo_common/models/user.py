@@ -47,6 +47,7 @@ class InvestmentPortfolio(BaseModel):
 class User(BaseModel):
     id: ulid.ULID = Field(...)
     api_key: str = Field(...)
+    email: str = Field(...)
     is_admin: bool = Field(False)
     name: str = Field(..., max_length=30)
     credentials: Credentials | None = Field(None)
